@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Czech Championship</title>
+<style>
+:root{
+  --bg:#0d1015;--panel:#161b23;--panel2:#1e2530;--line:#2a3342;
+  --text:#eef2f7;--muted:#93a0b4;--red:#d7141a;--blue:#2f6fc0;--blue-d:#11457e;
+  --green:#22c55e;--amber:#f5b301;--radius:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,var(--blue-d),#0d1015 60%);border-bottom:3px solid var(--red);padding:10px 14px;display:flex;align-items:center;gap:10px}
+header h1{font-size:17px;margin:0;letter-spacing:.5px;cursor:pointer}
+header h1 small{display:block;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+.pills{margin-left:auto;display:flex;gap:6px}
+.pill{background:rgba(255,255,255,.08);border-radius:99px;padding:4px 10px;font-size:13px;font-weight:600;white-space:nowrap}
+main{max-width:720px;margin:0 auto;padding:14px 14px 80px}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:22px 0 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi .v{font-size:26px;font-weight:800}
+.kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--red))}
+.week{display:flex;gap:6px;align-items:flex-end;height:70px;margin-top:8px}
+.week div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10px;color:var(--muted)}
+.week b{display:block;width:100%;background:var(--blue);border-radius:4px 4px 0 0;min-height:2px}
+.week div.today b{background:var(--red)}
+.round{display:flex;align-items:center;gap:12px;cursor:pointer}
+.round .num{width:40px;height:40px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;font-weight:800;flex:none}
+.round.done .num{background:var(--green);color:#04210f}
+.round.locked{opacity:.45;cursor:default}
+.round .t{font-weight:700}.round .s{font-size:13px;color:var(--muted)}
+.round .pos{margin-left:auto;font-size:13px;font-weight:700;text-align:right}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.btn{background:var(--red);color:#fff;font-weight:700;padding:13px 16px;border-radius:12px;width:100%;font-size:16px}
+.btn.alt{background:var(--panel2);border:1px solid var(--line)}
+.btn:disabled{opacity:.4}
+.tabs{display:flex;gap:6px;margin:6px 0 14px}
+.tabs button{flex:1;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:10px;font-weight:700;font-size:14px;color:var(--muted)}
+.tabs button.on{background:var(--blue-d);color:#fff;border-color:var(--blue)}
+.phrase{display:flex;gap:10px;align-items:flex-start}
+.phrase .cz{font-size:20px;font-weight:700}
+.phrase .en{color:var(--muted);font-size:14px}
+.phrase .note{font-size:13px;color:var(--amber);margin-top:4px}
+.spd{display:flex;gap:4px;margin-left:auto;flex:none}
+.spd button{background:var(--panel2);border:1px solid var(--line);border-radius:9px;width:40px;height:38px;font-size:18px}
+.dots{display:flex;gap:3px;margin-top:6px}
+.dots i{width:14px;height:5px;border-radius:3px;background:var(--panel2)}
+.dots i.on{background:var(--green)}
+.setup table{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
+.setup td,.setup th{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left}
+.setup th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.setup .cz{color:#9cc3ff;font-weight:700}
+.q-head{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}
+.laps{display:flex;gap:3px;margin-bottom:14px}
+.laps i{flex:1;height:6px;border-radius:3px;background:var(--panel2)}
+.laps i.ok{background:var(--green)}.laps i.bad{background:var(--red)}.laps i.cur{background:var(--amber)}
+.prompt{font-size:24px;font-weight:800;margin:6px 0 14px;text-align:center}
+.prompt.en{font-size:20px;font-weight:700}
+.kind{text-align:center;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
+.play{display:flex;justify-content:center;gap:10px;margin:10px 0 16px}
+.play button{background:var(--blue-d);border:1px solid var(--blue);border-radius:50%;width:64px;height:64px;font-size:26px}
+.play button.slow{width:52px;height:52px;font-size:20px;align-self:center}
+.opts{display:grid;gap:8px}
+.opt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px;text-align:left;font-size:16px}
+.opt.right{background:#0f3b22;border-color:var(--green)}
+.opt.wrong{background:#3b0f12;border-color:var(--red)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
+.tile{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:17px;font-weight:600}
+.tile.used{opacity:.2;pointer-events:none}
+.answer{border-bottom:2px dashed var(--line);margin-bottom:14px;padding-bottom:10px}
+input.type{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--text);font-size:18px;margin-bottom:10px}
+.fb{margin-top:14px;border-radius:12px;padding:12px 14px}
+.fb.ok{background:#0f3b22;border:1px solid var(--green)}
+.fb.no{background:#3b0f12;border:1px solid var(--red)}
+.fb .cz{font-size:19px;font-weight:800}
+.result{text-align:center}
+.result .p{font-size:64px;font-weight:900;line-height:1}
+.warn{background:#3a2a05;border:1px solid var(--amber);color:#ffe08a;font-size:14px}
+.muted{color:var(--muted);font-size:14px}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.back{background:none;color:var(--muted);padding:4px 0;font-size:14px}
+.soon{opacity:.6}
+</style>
+</head>
+<body>
+<header>
+  <h1 onclick="go('home')">🏁 Czech Championship<small>Česká mistrovství · Season 1</small></h1>
+  <div class="pills"><span class="pill" id="pStreak">🔥 0</span><span class="pill" id="pXp">⭐ 0</span></div>
+</header>
+<main id="app"></main>
+
+<script>
+/* ===================== CONTENT ===================== */
+const ROUNDS = [
+{ id:"pozdravy", n:1, title:"Pozdravy", en:"Greetings at the door",
+  phrases:[
+    ["Ahoj","Hi / bye (informal – ty)","Partner, kids, friends your age."],
+    ["Dobrý den","Hello (formal – vy)","Your partner's parents – until they offer ty."],
+    ["Dobrý večer","Good evening",""],
+    ["Na shledanou","Goodbye (formal)","Literally 'until we see each other again'."],
+    ["Jak se máš?","How are you? (ty)",""],
+    ["Jak se máte?","How are you? (vy / plural)",""],
+    ["Mám se dobře, děkuju.","I'm well, thanks.","Literally 'I have myself well'."],
+    ["A ty?","And you? (ty)",""],
+    ["A vy?","And you? (vy)",""],
+    ["Děkuju","Thank you","Děkuji is the slightly more formal form."],
+    ["Prosím","Please / you're welcome / here you go","The Swiss-army word."],
+    ["Ano","Yes","Czechs also say 'jo' – and confusingly 'no' – both mean yes!"],
+    ["Ne","No",""]
+  ],
+  setup:`<h3>Ty vs Vy – the two "you"s</h3>
+  <p>Czech has an informal <b>ty</b> and a formal <b>vy</b>. Get this right at the door and you've won the first corner.</p>
+  <table><tr><th></th><th>ty (informal)</th><th>vy (formal)</th></tr>
+  <tr><td>Hello</td><td class="cz">Ahoj</td><td class="cz">Dobrý den</td></tr>
+  <tr><td>How are you?</td><td class="cz">Jak se máš?</td><td class="cz">Jak se máte?</td></tr>
+  <tr><td>And you?</td><td class="cz">A ty?</td><td class="cz">A vy?</td></tr>
+  <tr><td>Bye</td><td class="cz">Ahoj</td><td class="cz">Na shledanou</td></tr></table>
+  <p><b>Race rule:</b> your partner and daughter → <b>ty</b>. Her parents → <b>vy</b>, until they say <span class="cz">„Klidně mi tykej“</span> ("feel free to say ty to me"). The older person offers ty – never you.</p>
+  <p><b>Spot the pattern:</b> ty-verbs end in <b>-š</b> (máš), vy-verbs end in <b>-te</b> (máte). That works for almost every verb.</p>`
+},
+{ id:"stul", n:2, title:"U stolu", en:"At the table",
+  phrases:[
+    ["Dobrou chuť!","Enjoy your meal!","Said before eating – reply with the same."],
+    ["Na zdraví!","Cheers!","Also said after a sneeze."],
+    ["To je moc dobré.","That's really good.",""],
+    ["Chutná mi to.","I like it (the taste).","Literally 'it tastes to me'."],
+    ["Ještě trochu, prosím.","A little more, please.",""],
+    ["Už nemůžu, děkuju.","I can't eat any more, thanks.","Essential at a Czech Christmas."],
+    ["Dáte si kávu?","Would you like a coffee? (vy)","You'll hear this a lot."],
+    ["Ano, prosím.","Yes, please.",""],
+    ["Ne, děkuju.","No, thank you.",""],
+    ["Mám hlad.","I'm hungry.","Literally 'I have hunger'."],
+    ["Mám žízeň.","I'm thirsty.","Literally 'I have thirst'."]
+  ],
+  setup:`<h3>Být & mít – to be, to have</h3>
+  <p>These two verbs carry half of all small talk. Czech usually drops the "I/you" – the ending tells you who.</p>
+  <table><tr><th>who</th><th>být (be)</th><th>mít (have)</th></tr>
+  <tr><td>I</td><td class="cz">jsem</td><td class="cz">mám</td></tr>
+  <tr><td>you (ty)</td><td class="cz">jsi</td><td class="cz">máš</td></tr>
+  <tr><td>he / she / it</td><td class="cz">je</td><td class="cz">má</td></tr>
+  <tr><td>we</td><td class="cz">jsme</td><td class="cz">máme</td></tr>
+  <tr><td>you (vy)</td><td class="cz">jste</td><td class="cz">máte</td></tr>
+  <tr><td>they</td><td class="cz">jsou</td><td class="cz">mají</td></tr></table>
+  <p><b>Note:</b> Czech <i>has</i> hunger and thirst: <span class="cz">Mám hlad</span> = I have hunger. And <span class="cz">To je…</span> = "That is…" – the most useful two words at the table.</p>`
+},
+{ id:"vanoce", n:3, title:"Vánoce", en:"Christmas Eve",
+  phrases:[
+    ["Veselé Vánoce!","Merry Christmas!",""],
+    ["Šťastný nový rok!","Happy New Year!",""],
+    ["Štědrý večer","Christmas Eve (the evening)","The main event: dinner on the 24th, then presents."],
+    ["Ježíšek","Baby Jesus – he brings the presents","Not Santa! Listen for the little bell."],
+    ["dárek","a present",""],
+    ["dárky","presents",""],
+    ["stromeček","Christmas tree","Literally 'little tree'."],
+    ["kapr","carp","The traditional Christmas Eve fish."],
+    ["bramborový salát","potato salad","Served with the carp."],
+    ["cukroví","Christmas biscuits",""],
+    ["Děkuju za dárek.","Thanks for the present.",""]
+  ],
+  setup:`<h3>Every noun has a gender</h3>
+  <p>Masculine, feminine or neuter. You can usually tell from the ending – and the little word for "the/that" changes with it.</p>
+  <table><tr><th>gender</th><th>usual ending</th><th>examples</th></tr>
+  <tr><td>masculine</td><td>consonant</td><td class="cz">ten dárek, ten kapr</td></tr>
+  <tr><td>feminine</td><td>-a</td><td class="cz">ta babička, ta káva</td></tr>
+  <tr><td>neuter</td><td>-o / -í</td><td class="cz">to cukroví, to pivo</td></tr></table>
+  <p><b>Adjectives match the gender:</b> <span class="cz">dobrý den</span> (m) · <span class="cz">dobrá káva</span> (f) · <span class="cz">dobré pivo</span> (n).</p>
+  <p><b>Quirk:</b> <span class="cz">Vánoce</span> is always plural – that's why it's <span class="cz">Veselé</span> Vánoce.</p>`
+},
+{ id:"rodina", n:4, title:"Rodina", en:"Meet the family",
+  phrases:[
+    ["máma","mum",""],
+    ["mami!","Mum! (calling her)","Vocative – see Setup."],
+    ["táta","dad",""],
+    ["tati!","Dad! (calling you)","What your daughter shouts."],
+    ["babička","grandma",""],
+    ["děda","grandpa",""],
+    ["dcera","daughter",""],
+    ["partnerka","partner (female)",""],
+    ["Jmenuju se Daren.","My name is Daren.","Jmenuji se is the formal form."],
+    ["Těší mě.","Nice to meet you.",""],
+    ["Tohle je moje dcera.","This is my daughter.",""],
+    ["Mluvím jen trochu česky.","I only speak a little Czech.",""],
+    ["Nerozumím.","I don't understand.",""],
+    ["Můžete mluvit pomaleji?","Can you speak more slowly? (vy)","Your listening lifeline."]
+  ],
+  setup:`<h3>The vocative – calling someone</h3>
+  <p>Your first grammar case, and your daughter already uses it. When you <i>call</i> someone, their name changes.</p>
+  <table><tr><th>talking about</th><th>calling them</th></tr>
+  <tr><td class="cz">máma</td><td class="cz">mami!</td></tr>
+  <tr><td class="cz">táta</td><td class="cz">tati!</td></tr>
+  <tr><td class="cz">babička</td><td class="cz">babičko!</td></tr>
+  <tr><td class="cz">děda</td><td class="cz">dědo!</td></tr>
+  <tr><td class="cz">Daren</td><td class="cz">Darene!</td></tr></table>
+  <p>So when the family call you <span class="cz">Darene</span>, that's not a mistake – that's grammar.</p>`
+},
+{ id:"tatinek", n:5, title:"Tatínek", en:"Daddy Track taster",
+  phrases:[
+    ["Pojď sem!","Come here!",""],
+    ["Ještě jednou!","Again! / One more time!",""],
+    ["Hotovo!","Done! / All finished!",""],
+    ["Šikulka!","Clever girl!",""],
+    ["Máš hlad?","Are you hungry?","Same as Mám hlad – but the ty form."],
+    ["Pojď spinkat.","Come to bed (sleepy time).","spinkat = baby-talk for sleep."],
+    ["Dobrou noc.","Goodnight.",""],
+    ["Kde je méďa?","Where's teddy?",""],
+    ["Dej mi pusu.","Give me a kiss.",""],
+    ["Mám tě rád.","I love you. (a man says)","A woman says: Mám tě ráda."]
+  ],
+  setup:`<h3>Commands & rád / ráda</h3>
+  <p><b>Commands to one person (ty)</b> are short: <span class="cz">Pojď!</span> (come) · <span class="cz">Dej!</span> (give) · <span class="cz">Podívej!</span> (look).</p>
+  <p><b>Rád / ráda</b> changes with the speaker's gender:</p>
+  <table><tr><th>speaker</th><th>I love you</th></tr>
+  <tr><td>you (man)</td><td class="cz">Mám tě rád.</td></tr>
+  <tr><td>your partner / daughter</td><td class="cz">Mám tě ráda.</td></tr></table>
+  <p>Full Daddy Track (bath, food, play, bedtime) arrives in January.</p>`
+}
+];
+
+const SCEN = [
+  {s:"Your partner's mum opens the door. First time meeting.", o:["Ahoj, jak se máš?","Dobrý den, jak se máte?","Na shledanou!"], a:1, why:"Older + first meeting → vy."},
+  {s:"Your daughter runs in from the garden.", o:["Dobrý den!","Ahoj!","A vy?"], a:1, why:"Kids always get ty."},
+  {s:"Leaving her parents' house on Christmas night.", o:["Dobrý den!","Ahoj!","Na shledanou!"], a:2, why:"Formal goodbye. Dobrý den is only hello."},
+  {s:"Her mum smiles: „Klidně mi tykej.“ Then asks how you are. You ask back:", o:["A vy?","A ty?","Prosím."], a:1, why:"She's offered ty – switch! Big moment."},
+  {s:"Her dad asks: „Jak se máte?“", o:["Mám se dobře, děkuju. A vy?","Ahoj, a ty?","Na shledanou."], a:0, why:"Answer, thank, and bounce it back in the vy form."}
+];
+
+const PHASES = [
+  ["Daddy Track","Jan–Feb","Present tense, accusative, your daughter's world"],
+  ["Catch-up Talk","Mar–Apr","Past tense, chci / můžu / musím, questions"],
+  ["Title Decider","May","Future tense, full-speed listening, 10-min conversation"]
+];
+const TARGET_HOURS = 45;
+
+/* ===================== STATE ===================== */
+const KEY="czc_v1";
+const fresh=()=>({xp:0,streak:0,lastDay:null,minutes:0,mastery:{},rounds:{},listen:{r:0,t:0},speed:0.85,log:{}});
+let S; try{S=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY))||{})}catch(e){S=fresh()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const dayStr=(d=new Date())=>d.toISOString().slice(0,10);
+const ALL = ROUNDS.flatMap(r=>r.phrases.map(p=>({cz:p[0],en:p[1],note:p[2],round:r.id})));
+const box=cz=>S.mastery[cz]||0;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+
+function bumpStreak(){
+  const t=dayStr(); if(S.lastDay===t) return;
+  const y=dayStr(new Date(Date.now()-864e5));
+  S.streak = S.lastDay===y ? S.streak+1 : 1; S.lastDay=t;
+}
+function unlocked(i){return i===0 || (S.rounds[ROUNDS[i-1].id]?.best||0)>=80}
+function updatePills(){
+  document.getElementById("pXp").textContent="⭐ "+S.xp;
+  const alive = S.lastDay===dayStr()||S.lastDay===dayStr(new Date(Date.now()-864e5));
+  document.getElementById("pStreak").textContent="🔥 "+(alive?S.streak:0);
+}
+
+/* time on task: counts only while visible & recently active */
+let lastAct=Date.now();
+["click","touchstart","keydown"].forEach(e=>addEventListener(e,()=>lastAct=Date.now(),{passive:true}));
+setInterval(()=>{
+  if(document.hidden||Date.now()-lastAct>90000) return;
+  S.minutes+=0.25; const d=dayStr(); S.log[d]=(S.log[d]||0)+0.25; save();
+},15000);
+
+function twice(b,fn){if(b.dataset.arm){fn();return}b.dataset.arm=1;const t=b.textContent;b.textContent="Tap again to confirm";setTimeout(()=>{if(b.isConnected){delete b.dataset.arm;b.textContent=t}},3000)}
+/* ===================== AUDIO ===================== */
+let csVoice=null;
+function pickVoice(){const v=speechSynthesis.getVoices();csVoice=v.find(x=>/^cs/i.test(x.lang))||null}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(t,rate){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t); u.lang="cs-CZ"; if(csVoice)u.voice=csVoice;
+  u.rate=rate||S.speed; speechSynthesis.speak(u);
+}
+const SPEEDS=[["🐢",0.6],["🚗",0.85],["🏎️",1.05]];
+const spdBtns=cz=>`<div class="spd">${SPEEDS.map(([i,r])=>`<button onclick="speak(${esc(JSON.stringify(cz))},${r})">${i}</button>`).join("")}</div>`;
+
+/* ===================== VIEWS ===================== */
+const app=document.getElementById("app");
+let view={name:"home"};
+function go(name,arg){view={name,arg};render();scrollTo(0,0)}
+function render(){updatePills();({home,round,race,result})[view.name](view.arg)}
+
+function home(){
+  const mastered=ALL.filter(p=>box(p.cz)>=3).length;
+  const acc=S.listen.t?Math.round(100*S.listen.r/S.listen.t):0;
+  const hrs=S.minutes/60;
+  const days=[...Array(7)].map((_,i)=>{const d=new Date(Date.now()-(6-i)*864e5);return {k:dayStr(d),l:"MTWTFSS"[(d.getDay()+6)%7]}});
+  const max=Math.max(15,...days.map(d=>S.log[d.k]||0));
+  const voiceWarn = ("speechSynthesis" in window) && !csVoice ? `<div class="card warn">🔇 No Czech voice found yet. On Android: <b>Settings → Accessibility → Text-to-speech → Google → Install voice data → Czech</b>, then reload.</div>`:"";
+  app.innerHTML=`
+  ${voiceWarn}
+  <h2>Championship standings</h2>
+  <div class="grid">
+    <div class="card kpi"><div class="v">${mastered}<span class="muted">/${ALL.length}</span></div><div class="l">Phrases mastered</div><div class="bar"><i style="width:${100*mastered/ALL.length}%"></i></div></div>
+    <div class="card kpi"><div class="v">${acc}%</div><div class="l">Listening accuracy</div><div class="muted">${S.listen.r}/${S.listen.t} heard right</div></div>
+    <div class="card kpi"><div class="v">${hrs.toFixed(1)}<span class="muted">h</span></div><div class="l">of ${TARGET_HOURS}h season target</div><div class="bar"><i style="width:${Math.min(100,100*hrs/TARGET_HOURS)}%"></i></div></div>
+    <div class="card kpi"><div class="v">${Math.round(S.log[dayStr()]||0)}<span class="muted">/15m</span></div><div class="l">Today</div>
+      <div class="week">${days.map((d,i)=>`<div class="${i===6?"today":""}"><b style="height:${100*(S.log[d.k]||0)/max}%"></b>${d.l}</div>`).join("")}</div></div>
+  </div>
+  <h2>Round calendar · Christmas Sprint</h2>
+  ${ROUNDS.map((r,i)=>{const st=S.rounds[r.id];const lk=!unlocked(i);const done=(st?.best||0)>=80;
+    return `<div class="card round ${lk?"locked":""} ${done?"done":""}" ${lk?"":`onclick="go('round','${r.id}')"`}>
+      <div class="num">${lk?"🔒":done?"✓":"R"+r.n}</div>
+      <div><div class="t">${esc(r.title)}</div><div class="s">${esc(r.en)} · ${r.phrases.length} phrases</div></div>
+      <div class="pos">${st?posLabel(st.best).short:lk?"":"Start ›"}</div></div>`}).join("")}
+  <p class="muted">Podium (80%+) in a race unlocks the next round.</p>
+  <h2>Later this season</h2>
+  ${PHASES.map(p=>`<div class="card round soon"><div class="num">🏁</div><div><div class="t">${p[0]} <span class="muted">· ${p[1]}</span></div><div class="s">${p[2]}</div></div></div>`).join("")}
+  <h2>Pit settings</h2>
+  <div class="card"><div class="muted" style="margin-bottom:8px">Default race audio speed</div>
+    <div class="row">${SPEEDS.map(([i,r])=>`<button class="btn ${S.speed===r?"":"alt"}" onclick="S.speed=${r};save();render()">${i} ${r}×</button>`).join("")}</div>
+    <div style="margin-top:12px"><button class="btn alt" onclick="twice(this,()=>{S=fresh();save();render()})">Reset progress</button></div>
+  </div>`;
+}
+
+let tab="learn";
+function round(id){
+  const r=ROUNDS.find(x=>x.id===id);
+  app.innerHTML=`<button class="back" onclick="go('home')">‹ Calendar</button>
+  <h2 style="margin-top:6px">Round ${r.n} · ${esc(r.en)}</h2>
+  <div class="tabs">${[["learn","📖 Learn"],["setup","🔧 Setup"],["race","🏁 Race"]].map(([k,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';render()">${l}</button>`).join("")}</div>
+  <div id="tabBody"></div>`;
+  const b=document.getElementById("tabBody");
+  if(tab==="learn"){
+    b.innerHTML=`<p class="muted">Tap 🐢 first, then 🚗, then 🏎️. Say it out loud each time.</p>`+
+    r.phrases.map(([cz,en,note])=>`<div class="card phrase"><div><div class="cz">${esc(cz)}</div><div class="en">${esc(en)}</div>${note?`<div class="note">${esc(note)}</div>`:""}
+    <div class="dots">${[1,2,3,4,5].map(n=>`<i class="${box(cz)>=n?"on":""}"></i>`).join("")}</div></div>${spdBtns(cz)}</div>`).join("")+
+    `<button class="btn" onclick="tab='race';render()">Go to the grid 🏁</button>`;
+  } else if(tab==="setup"){
+    b.innerHTML=`<div class="card setup">${r.setup}</div><button class="btn" onclick="tab='race';render()">Go to the grid 🏁</button>`;
+  } else {
+    const st=S.rounds[id];
+    b.innerHTML=`<div class="card"><b>10-lap race.</b> Mostly listening (your weak spot), plus building phrases and picking meanings. 80%+ = podium.
+    ${st?`<p class="muted">Best: ${st.best}% (${posLabel(st.best).short}) · ${st.runs} race${st.runs>1?"s":""}</p>`:""}</div>
+    <button class="btn" onclick="startRace('${id}')">Lights out 🚦</button>`;
+  }
+}
+
+/* ===================== RACE ===================== */
+let R=null;
+function startRace(id){
+  const idx=ROUNDS.findIndex(x=>x.id===id), r=ROUNDS[idx];
+  const cur=ALL.filter(p=>p.round===id), prev=ALL.filter(p=>ROUNDS.findIndex(x=>x.id===p.round)<idx);
+  const byWeak=arr=>shuffle(arr).sort((a,b)=>box(a.cz)-box(b.cz));
+  let picks=byWeak(cur).slice(0,prev.length?8:10);
+  if(prev.length) picks=picks.concat(byWeak(prev).slice(0,2));
+  while(picks.length<10) picks.push(cur[Math.random()*cur.length|0]);
+  picks=shuffle(picks);
+  const types=shuffle(["listen","listen","listen","type","build","build","read","en2cz","listen","type"]);
+  let qs=picks.map((p,i)=>{let t=types[i]; if(t==="build"&&p.cz.split(" ").length<2)t="listen"; return {t,p}});
+  if(id==="pozdravy") shuffle(SCEN).slice(0,3).forEach((s,i)=>qs[i*3+1]={t:"scen",s});
+  R={id,qs,i:0,res:[],answered:false,built:[]};
+  go("race");
+}
+function opts(p,lang){
+  const key=lang==="cz"?"cz":"en";
+  const pool=shuffle(ALL.filter(x=>x[key]!==p[key])).slice(0,3).map(x=>x[key]);
+  return shuffle([p[key],...pool]);
+}
+function race(){
+  const q=R.qs[R.i];
+  const laps=R.qs.map((_,i)=>`<i class="${i<R.res.length?(R.res[i]?"ok":"bad"):i===R.i?"cur":""}"></i>`).join("");
+  let body="";
+  if(q.t==="scen"){
+    q.o=q.o||q.s.o.map((x,i)=>({x,i}));
+    body=`<div class="kind">Ty or vy?</div><div class="prompt en">${esc(q.s.s)}</div>
+    <div class="opts">${q.o.map(o=>`<button class="opt" data-v="${o.i}" onclick="answerScen(${o.i},this)">${esc(o.x)}</button>`).join("")}</div>`;
+  } else if(q.t==="listen"){
+    q.o=q.o||opts(q.p,"en");
+    body=`<div class="kind">🎧 Listen – what does it mean?</div>${playBtns(q.p.cz)}
+    <div class="opts">${q.o.map((o,i)=>`<button class="opt" onclick="answerOpt(${i},this,'en')">${esc(o)}</button>`).join("")}</div>`;
+  } else if(q.t==="read"){
+    q.o=q.o||opts(q.p,"en");
+    body=`<div class="kind">Read – what does it mean?</div><div class="prompt">${esc(q.p.cz)}</div>
+    <div class="opts">${q.o.map((o,i)=>`<button class="opt" onclick="answerOpt(${i},this,'en')">${esc(o)}</button>`).join("")}</div>`;
+  } else if(q.t==="en2cz"){
+    q.o=q.o||opts(q.p,"cz");
+    body=`<div class="kind">Say it in Czech</div><div class="prompt en">${esc(q.p.en)}</div>
+    <div class="opts">${q.o.map((o,i)=>`<button class="opt" onclick="answerOpt(${i},this,'cz')">${esc(o)}</button>`).join("")}</div>`;
+  } else if(q.t==="build"){
+    q.tiles=q.tiles||shuffle(q.p.cz.split(" ").map((w,i)=>({w,i})));
+    body=`<div class="kind">Build the phrase</div><div class="prompt en">${esc(q.p.en)}</div>
+    <div class="tiles answer">${R.built.map((k,j)=>`<button class="tile" onclick="unbuild(${j})">${esc(q.tiles[k].w)}</button>`).join("")}</div>
+    <div class="tiles">${q.tiles.map((t,k)=>`<button class="tile ${R.built.includes(k)?"used":""}" onclick="build(${k})">${esc(t.w)}</button>`).join("")}</div>
+    <div style="margin-top:14px"><button class="btn" ${R.built.length===q.tiles.length&&!R.answered?"":"disabled"} onclick="checkBuild()">Check</button></div>`;
+  } else if(q.t==="type"){
+    body=`<div class="kind">🎧 Type what you hear</div>${playBtns(q.p.cz)}
+    <input class="type" id="typed" autocomplete="off" autocapitalize="off" placeholder="Accents optional…" onkeydown="if(event.key==='Enter')checkType()">
+    <button class="btn" id="chk" onclick="checkType()">Check</button>`;
+  }
+  app.innerHTML=`<div class="q-head"><span>Lap ${R.i+1}/10</span><button class="back" onclick="twice(this,()=>go('round','${R.id}'))">Retire ✕</button></div>
+  <div class="laps">${laps}</div>${body}<div id="fb"></div>`;
+  if((q.t==="listen"||q.t==="type")&&!R.answered) setTimeout(()=>speak(q.p.cz),300);
+}
+const playBtns=cz=>`<div class="play"><button onclick="speak(${esc(JSON.stringify(cz))})">🔊</button><button class="slow" onclick="speak(${esc(JSON.stringify(cz))},0.6)">🐢</button></div>`;
+
+function score(ok){
+  if(R.answered)return; R.answered=true;
+  const q=R.qs[R.i]; R.res.push(ok);
+  if(q.p){ S.mastery[q.p.cz]=ok?Math.min(5,box(q.p.cz)+1):Math.max(0,box(q.p.cz)-2); }
+  if(q.t==="listen"||q.t==="type"){S.listen.t++; if(ok)S.listen.r++;}
+  if(ok){S.xp+=10;bumpStreak();}
+  save(); updatePills();
+  const fb=document.getElementById("fb");
+  const p=q.p;
+  fb.innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"✅ Clean lap!":"❌ Lock-up."}
+    ${p?`<div class="row" style="align-items:center;margin-top:6px"><div><div class="cz">${esc(p.cz)}</div><div class="muted">${esc(p.en)}</div>${p.note?`<div class="note" style="color:var(--amber);font-size:13px">${esc(p.note)}</div>`:""}</div>${spdBtns(p.cz)}</div>`
+      :`<div style="margin-top:6px"><b>${esc(q.s.o[q.s.a])}</b><div class="muted">${esc(q.s.why)}</div></div>`}
+  </div><div style="margin-top:12px"><button class="btn" onclick="next()">${R.i<9?"Next lap ›":"Chequered flag 🏁"}</button></div>`;
+  if(p&&!ok) speak(p.cz);
+  fb.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function answerOpt(i,el,lang){
+  if(R.answered)return; const q=R.qs[R.i]; const right=q.o[i]===q.p[lang];
+  document.querySelectorAll(".opt").forEach((b,k)=>{if(q.o[k]===q.p[lang])b.classList.add("right")});
+  if(!right)el.classList.add("wrong"); score(right);
+}
+function answerScen(v,el){
+  if(R.answered)return; const q=R.qs[R.i];
+  document.querySelectorAll(".opt").forEach(b=>{if(+b.dataset.v===q.s.a)b.classList.add("right")});
+  if(v!==q.s.a)el.classList.add("wrong"); score(v===q.s.a);
+}
+function build(k){if(R.answered)return;R.built.push(k);race()}
+function unbuild(j){if(R.answered)return;R.built.splice(j,1);race()}
+function checkBuild(){const q=R.qs[R.i];const s=R.built.map(k=>q.tiles[k].w).join(" ");race();score(s===q.p.cz)}
+function checkType(){
+  if(R.answered)return; const q=R.qs[R.i]; const v=document.getElementById("typed").value;
+  document.getElementById("chk").disabled=true; score(norm(v)===norm(q.p.cz));
+}
+function next(){
+  R.i++; R.answered=false; R.built=[];
+  if(R.i>=R.qs.length){
+    const pct=Math.round(100*R.res.filter(Boolean).length/R.qs.length);
+    const st=S.rounds[R.id]||{best:0,runs:0}; const wasLocked=st.best<80;
+    st.runs++; st.best=Math.max(st.best,pct); S.rounds[R.id]=st;
+    if(pct>=80)S.xp+=20; save();
+    go("result",{pct,newUnlock:wasLocked&&pct>=80});
+  } else race();
+}
+function posLabel(p){
+  if(p===100)return{big:"P1",short:"🥇 P1",msg:"Lights-to-flag win. Perfect race."};
+  if(p>=90)return{big:"P2",short:"🥈 P2",msg:"So close. One lock-up from the win."};
+  if(p>=80)return{big:"P3",short:"🥉 P3",msg:"Podium! Next round unlocked."};
+  if(p>=60)return{big:"P6",short:"P6",msg:"Points, but not on the podium. Do a Learn lap and go again."};
+  return{big:"P14",short:"P14",msg:"Rough one. Back to the Setup tab, then re-run."};
+}
+function result({pct,newUnlock}){
+  const L=posLabel(pct), idx=ROUNDS.findIndex(x=>x.id===R.id), nxt=ROUNDS[idx+1];
+  const misses=R.qs.filter((q,i)=>!R.res[i]&&q.p).map(q=>q.p);
+  app.innerHTML=`<div class="card result"><div class="muted">Round ${ROUNDS[idx].n} · ${esc(ROUNDS[idx].en)}</div>
+    <div class="p">${L.big}</div><div style="font-size:22px;font-weight:800">${pct}%</div><p>${L.msg}</p>
+    ${newUnlock&&nxt?`<p>🔓 <b>Round ${nxt.n}: ${esc(nxt.en)}</b> unlocked</p>`:""}</div>
+  ${misses.length?`<h2>Debrief – lock-ups</h2>`+misses.map(p=>`<div class="card phrase"><div><div class="cz">${esc(p.cz)}</div><div class="en">${esc(p.en)}</div></div>${spdBtns(p.cz)}</div>`).join(""):""}
+  <div class="row" style="margin-top:12px"><button class="btn alt" onclick="startRace('${R.id}')">Re-run</button>
+  ${newUnlock&&nxt?`<button class="btn" onclick="tab='learn';go('round','${nxt.id}')">Next round ›</button>`:`<button class="btn" onclick="go('home')">Calendar</button>`}</div>`;
+}
+
+render();
+</script>
+</body>
+</html>
