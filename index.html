@@ -393,8 +393,8 @@ function race(){
     <div class="tiles">${q.tiles.map((t,k)=>`<button class="tile ${R.built.includes(k)?"used":""}" onclick="build(${k})">${esc(t.w)}</button>`).join("")}</div>
     <div style="margin-top:14px"><button class="btn" ${R.built.length===q.tiles.length&&!R.answered?"":"disabled"} onclick="checkBuild()">Check</button></div>`;
   } else if(q.t==="type"){
-    body=`<div class="kind">🎧 Type what you hear</div>${playBtns(q.p.cz)}
-    <input class="type" id="typed" autocomplete="off" autocapitalize="off" placeholder="Accents optional…" onkeydown="if(event.key==='Enter')checkType()">
+    body=`<div class="kind">🎧 Type what you hear</div><div class="muted" style="text-align:center">In Czech, or what it means in English</div>${playBtns(q.p.cz)}
+    <input class="type" id="typed" autocomplete="off" autocapitalize="off" placeholder="Czech or English – accents optional" onkeydown="if(event.key==='Enter')checkType()">
     <button class="btn" id="chk" onclick="checkType()">Check</button>`;
   }
   app.innerHTML=`<div class="q-head"><span>Lap ${R.i+1}/10</span><button class="back" onclick="twice(this,()=>go('round','${R.id}'))">Retire ✕</button></div>
@@ -432,9 +432,24 @@ function answerScen(v,el){
 function build(k){if(R.answered)return;R.built.push(k);race()}
 function unbuild(j){if(R.answered)return;R.built.splice(j,1);race()}
 function checkBuild(){const q=R.qs[R.i];const s=R.built.map(k=>q.tiles[k].w).join(" ");race();score(s===q.p.cz)}
+/* lenient marking: Czech or English meaning, small typos forgiven */
+const SYN=[["thank you","thanks","cheers","ta"],["hi","hello","hey"],["bye","goodbye"],["mum","mom","mummy","mother"],["dad","daddy","father"],["grandma","granny","nan","nana"],["grandpa","grandad","granddad"],["present","gift"],["presents","gifts"],["coffee","a coffee"],["hungry","starving"],["goodnight","good night","night night"],["i love you","love you"]];
+function syn(s){SYN.forEach(g=>g.slice(1).forEach(w=>{s=(" "+s+" ").replace(new RegExp(" "+w+" ","g")," "+g[0]+" ").trim()}));return s}
+function lev(a,b){const d=[...Array(b.length+1).keys()];for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[b.length]}
+function enAnswers(en){
+  const base=en.replace(/\(.*?\)/g,"").replace(/–.*$/,"");
+  return base.split("/").map(x=>syn(norm(x).replace(/^(the|a|an) /,""))).filter(Boolean);
+}
+function close(a,b){return a===b||(b.length>3&&lev(a,b)<=Math.max(1,Math.floor(b.length/6)))}
+function markTyped(v,p){
+  const t=norm(v); if(!t) return false;
+  if(close(t,norm(p.cz))) return true;
+  const te=syn(t.replace(/^(the|a|an) /,""));
+  return enAnswers(p.en).some(a=>close(te,a));
+}
 function checkType(){
   if(R.answered)return; const q=R.qs[R.i]; const v=document.getElementById("typed").value;
-  document.getElementById("chk").disabled=true; score(norm(v)===norm(q.p.cz));
+  document.getElementById("chk").disabled=true; score(markTyped(v,q.p));
 }
 function next(){
   R.i++; R.answered=false; R.built=[];
