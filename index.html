@@ -4,88 +4,104 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Czech Championship</title>
+<meta name="theme-color" content="#11457e">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
   --bg:#0d1015;--panel:#161b23;--panel2:#1e2530;--line:#2a3342;
-  --text:#eef2f7;--muted:#93a0b4;--red:#d7141a;--blue:#2f6fc0;--blue-d:#11457e;
-  --green:#22c55e;--amber:#f5b301;--radius:14px;
+  --text:#eef2f7;--muted:#9aa7ba;--red:#d7141a;--blue:#2f6fc0;--blue-d:#11457e;
+  --green:#22c55e;--amber:#f5b301;--radius:16px;--nav:72px;
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,var(--blue-d),#0d1015 60%);border-bottom:3px solid var(--red);padding:10px 14px;display:flex;align-items:center;gap:10px}
-header h1{font-size:17px;margin:0;letter-spacing:.5px;cursor:pointer}
-header h1 small{display:block;font-size:11px;color:var(--muted);font-weight:500;letter-spacing:1.5px;text-transform:uppercase}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:17px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,var(--blue-d),#0d1015 70%);border-bottom:3px solid var(--red);padding:10px 12px;display:flex;align-items:center;gap:8px}
+header h1{font-size:19px;margin:0;cursor:pointer;line-height:1.15}
+header h1 small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
 .pills{margin-left:auto;display:flex;gap:6px}
-.pill{background:rgba(255,255,255,.08);border-radius:99px;padding:4px 10px;font-size:13px;font-weight:600;white-space:nowrap}
-main{max-width:720px;margin:0 auto;padding:14px 14px 80px}
-h2{font-size:15px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:22px 0 10px}
+.pill{background:rgba(255,255,255,.1);border-radius:99px;padding:6px 11px;font-size:15px;font-weight:700;white-space:nowrap}
+main{max-width:880px;margin:0 auto;padding:12px 10px calc(var(--nav) + 28px)}
+h2{font-size:14px;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);margin:20px 2px 10px}
+h3{font-size:21px;margin:0 0 8px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.kpi .v{font-size:26px;font-weight:800}
-.kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.bar{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid .card{margin:0}
+.kpi .v{font-size:30px;font-weight:800;line-height:1.1}
+.kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.bar{height:9px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:8px}
 .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--red))}
-.week{display:flex;gap:6px;align-items:flex-end;height:70px;margin-top:8px}
-.week div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10px;color:var(--muted)}
+.week{display:flex;gap:5px;align-items:flex-end;height:64px;margin-top:8px}
+.week div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;color:var(--muted)}
 .week b{display:block;width:100%;background:var(--blue);border-radius:4px 4px 0 0;min-height:2px}
 .week div.today b{background:var(--red)}
-.round{display:flex;align-items:center;gap:12px;cursor:pointer}
-.round .num{width:40px;height:40px;border-radius:10px;background:var(--panel2);display:grid;place-items:center;font-weight:800;flex:none}
+.round{display:flex;align-items:center;gap:12px;cursor:pointer;min-height:76px}
+.round .num{width:50px;height:50px;border-radius:12px;background:var(--panel2);display:grid;place-items:center;font-weight:800;font-size:17px;flex:none}
 .round.done .num{background:var(--green);color:#04210f}
 .round.locked{opacity:.45;cursor:default}
-.round .t{font-weight:700}.round .s{font-size:13px;color:var(--muted)}
-.round .pos{margin-left:auto;font-size:13px;font-weight:700;text-align:right}
+.round .t{font-weight:800;font-size:19px}.round .s{font-size:14px;color:var(--muted)}
+.round .pos{margin-left:auto;font-size:15px;font-weight:800;text-align:right;flex:none}
+.round .pos small{display:block;font-size:12px;color:var(--muted);font-weight:600}
 button{font:inherit;color:inherit;border:0;cursor:pointer}
-.btn{background:var(--red);color:#fff;font-weight:700;padding:13px 16px;border-radius:12px;width:100%;font-size:16px}
+.btn{background:var(--red);color:#fff;font-weight:800;padding:14px 16px;border-radius:14px;width:100%;font-size:18px;min-height:58px}
 .btn.alt{background:var(--panel2);border:1px solid var(--line)}
 .btn:disabled{opacity:.4}
-.tabs{display:flex;gap:6px;margin:6px 0 14px}
-.tabs button{flex:1;background:var(--panel);border:1px solid var(--line);padding:10px;border-radius:10px;font-weight:700;font-size:14px;color:var(--muted)}
-.tabs button.on{background:var(--blue-d);color:#fff;border-color:var(--blue)}
-.phrase{display:flex;gap:10px;align-items:flex-start}
-.phrase .cz{font-size:20px;font-weight:700}
-.phrase .en{color:var(--muted);font-size:14px}
-.phrase .note{font-size:13px;color:var(--amber);margin-top:4px}
-.spd{display:flex;gap:4px;margin-left:auto;flex:none}
-.spd button{background:var(--panel2);border:1px solid var(--line);border-radius:9px;width:40px;height:38px;font-size:18px}
-.dots{display:flex;gap:3px;margin-top:6px}
-.dots i{width:14px;height:5px;border-radius:3px;background:var(--panel2)}
+.seg{display:flex;gap:6px}.seg .btn{font-size:16px;min-height:52px;padding:8px}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:6px;background:#0a0d12;border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+nav.tabs button{flex:1;min-height:60px;border-radius:12px;background:transparent;color:var(--muted);font-weight:700;font-size:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+nav.tabs button span{font-size:22px;line-height:1}
+nav.tabs button.on{background:var(--blue-d);color:#fff}
+.phrase .cz{font-size:26px;font-weight:800;line-height:1.2}
+.phrase .en{color:var(--muted);font-size:17px;margin-top:2px}
+.phrase .note{font-size:15px;color:var(--amber);margin-top:4px}
+.spd{display:flex;gap:6px;margin-top:12px}
+.spd button{flex:1;min-height:50px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;font-size:15px;font-weight:700;white-space:nowrap}
+.spd button:active{background:var(--blue-d)}
+.dots{display:flex;gap:4px;margin-top:8px}
+.dots i{width:24px;height:6px;border-radius:3px;background:var(--panel2)}
 .dots i.on{background:var(--green)}
-.setup table{width:100%;border-collapse:collapse;margin:8px 0;font-size:15px}
-.setup td,.setup th{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left}
-.setup th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}
-.setup .cz{color:#9cc3ff;font-weight:700}
-.q-head{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:8px}
-.laps{display:flex;gap:3px;margin-bottom:14px}
-.laps i{flex:1;height:6px;border-radius:3px;background:var(--panel2)}
+.cards{display:grid;gap:10px;margin-bottom:12px}.cards .card{margin:0}
+.setup{font-size:18px}
+.setup table{width:100%;border-collapse:collapse;margin:10px 0;font-size:18px}
+.setup td,.setup th{border-bottom:1px solid var(--line);padding:9px 6px;text-align:left;vertical-align:top}
+.setup th{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:1px}
+.cz{color:#a9cbff;font-weight:700}
+.phrase .cz,.fb .cz{color:var(--text)}
+.q-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:16px;margin-bottom:8px}
+.laps{display:flex;gap:4px;margin-bottom:16px}
+.laps i{flex:1;height:8px;border-radius:4px;background:var(--panel2)}
 .laps i.ok{background:var(--green)}.laps i.bad{background:var(--red)}.laps i.cur{background:var(--amber)}
-.prompt{font-size:24px;font-weight:800;margin:6px 0 14px;text-align:center}
-.prompt.en{font-size:20px;font-weight:700}
-.kind{text-align:center;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber)}
-.play{display:flex;justify-content:center;gap:10px;margin:10px 0 16px}
-.play button{background:var(--blue-d);border:1px solid var(--blue);border-radius:50%;width:64px;height:64px;font-size:26px}
-.play button.slow{width:52px;height:52px;font-size:20px;align-self:center}
-.opts{display:grid;gap:8px}
-.opt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px;text-align:left;font-size:16px}
+.prompt{font-size:32px;font-weight:800;margin:8px 0 16px;text-align:center;line-height:1.2}
+.prompt.en{font-size:24px;font-weight:700}
+.kind{text-align:center;font-size:14px;letter-spacing:1.3px;text-transform:uppercase;color:var(--amber);font-weight:700}
+.sub{text-align:center;color:var(--muted);font-size:15px;margin-top:2px}
+.play{display:flex;justify-content:center;gap:14px;margin:14px 0 18px}
+.play button{background:var(--blue-d);border:1px solid var(--blue);border-radius:50%;width:84px;height:84px;font-size:34px}
+.play button.slow{width:64px;height:64px;font-size:26px;align-self:center}
+.opts{display:grid;gap:10px}
+.opt{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px 16px;text-align:left;font-size:20px;min-height:62px}
 .opt.right{background:#0f3b22;border-color:var(--green)}
 .opt.wrong{background:#3b0f12;border-color:var(--red)}
-.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:52px}
-.tile{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:17px;font-weight:600}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:58px}
+.tile{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 15px;font-size:21px;font-weight:700;min-height:54px}
 .tile.used{opacity:.2;pointer-events:none}
 .answer{border-bottom:2px dashed var(--line);margin-bottom:14px;padding-bottom:10px}
-input.type{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--text);font-size:18px;margin-bottom:10px}
-.fb{margin-top:14px;border-radius:12px;padding:12px 14px}
+input.type{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;color:var(--text);font-size:21px;margin-bottom:10px;min-height:60px}
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;font-size:18px}
 .fb.ok{background:#0f3b22;border:1px solid var(--green)}
 .fb.no{background:#3b0f12;border:1px solid var(--red)}
-.fb .cz{font-size:19px;font-weight:800}
+.fb .cz{font-size:23px;font-weight:800;margin-top:6px}
 .result{text-align:center}
-.result .p{font-size:64px;font-weight:900;line-height:1}
-.warn{background:#3a2a05;border:1px solid var(--amber);color:#ffe08a;font-size:14px}
-.muted{color:var(--muted);font-size:14px}
-.row{display:flex;gap:8px}
-.row>*{flex:1}
-.back{background:none;color:var(--muted);padding:4px 0;font-size:14px}
-.soon{opacity:.6}
+.result .p{font-size:72px;font-weight:900;line-height:1}
+.warn{background:#3a2a05;border:1px solid var(--amber);color:#ffe08a;font-size:15px}
+.muted{color:var(--muted);font-size:15px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.back{background:none;color:var(--muted);padding:8px 0;font-size:16px;min-height:44px}
+.soon{opacity:.6;cursor:default}
+html.wide .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+html.wide .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+html.wide .opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+html.wide main{padding-inline:16px}
 </style>
 </head>
 <body>
@@ -239,7 +255,7 @@ const TARGET_HOURS = 45;
 
 /* ===================== STATE ===================== */
 const KEY="czc_v1";
-const fresh=()=>({xp:0,streak:0,lastDay:null,minutes:0,mastery:{},rounds:{},listen:{r:0,t:0},speed:0.85,log:{}});
+const fresh=()=>({xp:0,streak:0,lastDay:null,minutes:0,mastery:{},rounds:{},listen:{r:0,t:0},speed:0.85,log:{},pit:{},textScale:1});
 let S; try{S=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY))||{})}catch(e){S=fresh()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const dayStr=(d=new Date())=>d.toISOString().slice(0,10);
@@ -280,14 +296,14 @@ function speak(t,rate){
   const u=new SpeechSynthesisUtterance(t); u.lang="cs-CZ"; if(csVoice)u.voice=csVoice;
   u.rate=rate||S.speed; speechSynthesis.speak(u);
 }
-const SPEEDS=[["🐢",0.6],["🚗",0.85],["🏎️",1.05]];
+const SPEEDS=[["🐢 Slow",0.6],["🚗 Normal",0.85],["🏎️ Fast",1.05]];
 const spdBtns=cz=>`<div class="spd">${SPEEDS.map(([i,r])=>`<button onclick="speak(${esc(JSON.stringify(cz))},${r})">${i}</button>`).join("")}</div>`;
 
 /* ===================== VIEWS ===================== */
 const app=document.getElementById("app");
 let view={name:"home"};
 function go(name,arg){view={name,arg};render();scrollTo(0,0)}
-function render(){updatePills();({home,round,race,result})[view.name](view.arg)}
+function render(){updatePills();({home,round,race,result,pit,pitResult})[view.name](view.arg)}
 
 function home(){
   const mastered=ALL.filter(p=>box(p.cz)>=3).length;
@@ -301,48 +317,61 @@ function home(){
   <h2>Championship standings</h2>
   <div class="grid">
     <div class="card kpi"><div class="v">${mastered}<span class="muted">/${ALL.length}</span></div><div class="l">Phrases mastered</div><div class="bar"><i style="width:${100*mastered/ALL.length}%"></i></div></div>
-    <div class="card kpi"><div class="v">${acc}%</div><div class="l">Listening accuracy</div><div class="muted">${S.listen.r}/${S.listen.t} heard right</div></div>
-    <div class="card kpi"><div class="v">${hrs.toFixed(1)}<span class="muted">h</span></div><div class="l">of ${TARGET_HOURS}h season target</div><div class="bar"><i style="width:${Math.min(100,100*hrs/TARGET_HOURS)}%"></i></div></div>
+    <div class="card kpi"><div class="v">${acc}%</div><div class="l">Listening</div><div class="muted">${S.listen.r}/${S.listen.t} heard right</div></div>
+    <div class="card kpi"><div class="v">${hrs.toFixed(1)}<span class="muted">h</span></div><div class="l">of ${TARGET_HOURS}h target</div><div class="bar"><i style="width:${Math.min(100,100*hrs/TARGET_HOURS)}%"></i></div></div>
     <div class="card kpi"><div class="v">${Math.round(S.log[dayStr()]||0)}<span class="muted">/15m</span></div><div class="l">Today</div>
       <div class="week">${days.map((d,i)=>`<div class="${i===6?"today":""}"><b style="height:${100*(S.log[d.k]||0)/max}%"></b>${d.l}</div>`).join("")}</div></div>
   </div>
   <h2>Round calendar · Christmas Sprint</h2>
-  ${ROUNDS.map((r,i)=>{const st=S.rounds[r.id];const lk=!unlocked(i);const done=(st?.best||0)>=80;
-    return `<div class="card round ${lk?"locked":""} ${done?"done":""}" ${lk?"":`onclick="go('round','${r.id}')"`}>
+  <div class="cards">
+  ${ROUNDS.map((r,i)=>{const st=S.rounds[r.id];const pt=S.pit[r.id];const lk=!unlocked(i);const done=(st?.best||0)>=80;
+    return `<div class="card round ${lk?"locked":""} ${done?"done":""}" ${lk?"":`onclick="tab='learn';go('round','${r.id}')"`}>
       <div class="num">${lk?"🔒":done?"✓":"R"+r.n}</div>
-      <div><div class="t">${esc(r.title)}</div><div class="s">${esc(r.en)} · ${r.phrases.length} phrases</div></div>
-      <div class="pos">${st?posLabel(st.best).short:lk?"":"Start ›"}</div></div>`}).join("")}
+      <div><div class="t">${esc(r.title)}</div><div class="s">${esc(r.en)}</div></div>
+      <div class="pos">${st?posLabel(st.best).short:lk?"":"Start ›"}${pt?`<small>⛽ ${pt.best}/${PIT[r.id].length}</small>`:""}</div></div>`}).join("")}
+  </div>
   <p class="muted">Podium (80%+) in a race unlocks the next round.</p>
   <h2>Later this season</h2>
-  ${PHASES.map(p=>`<div class="card round soon"><div class="num">🏁</div><div><div class="t">${p[0]} <span class="muted">· ${p[1]}</span></div><div class="s">${p[2]}</div></div></div>`).join("")}
+  <div class="cards">
+  ${PHASES.map(p=>`<div class="card round soon"><div class="num">🏁</div><div><div class="t">${p[0]}</div><div class="s">${p[1]} · ${p[2]}</div></div></div>`).join("")}
+  </div>
   <h2>Pit settings</h2>
-  <div class="card"><div class="muted" style="margin-bottom:8px">Default race audio speed</div>
-    <div class="row">${SPEEDS.map(([i,r])=>`<button class="btn ${S.speed===r?"":"alt"}" onclick="S.speed=${r};save();render()">${i} ${r}×</button>`).join("")}</div>
-    <div style="margin-top:12px"><button class="btn alt" onclick="twice(this,()=>{S=fresh();save();render()})">Reset progress</button></div>
+  <div class="card">
+    <div class="muted" style="margin-bottom:8px">Text size</div>
+    <div class="seg">${[["S",0.9],["M",1],["L",1.15],["XL",1.3]].map(([l,v])=>`<button class="btn ${S.textScale===v?"":"alt"}" onclick="S.textScale=${v};save();fit();render()">${l}</button>`).join("")}</div>
+    <div class="muted" style="margin:16px 0 8px">Race audio speed</div>
+    <div class="seg">${SPEEDS.map(([i,r])=>`<button class="btn ${S.speed===r?"":"alt"}" onclick="S.speed=${r};save();render()">${i}</button>`).join("")}</div>
+    <div style="margin-top:16px"><button class="btn alt" onclick="twice(this,()=>{S=fresh();save();fit();render()})">Reset progress</button></div>
   </div>`;
 }
 
 let tab="learn";
+const TABS=[["learn","📖","Learn"],["setup","🔧","Setup"],["pit","⛽","Pit stop"],["race","🏁","Race"]];
 function round(id){
   const r=ROUNDS.find(x=>x.id===id);
-  app.innerHTML=`<button class="back" onclick="go('home')">‹ Calendar</button>
-  <h2 style="margin-top:6px">Round ${r.n} · ${esc(r.en)}</h2>
-  <div class="tabs">${[["learn","📖 Learn"],["setup","🔧 Setup"],["race","🏁 Race"]].map(([k,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';render()">${l}</button>`).join("")}</div>
-  <div id="tabBody"></div>`;
-  const b=document.getElementById("tabBody");
+  const nav=`<nav class="tabs">${TABS.map(([k,i,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';render();scrollTo(0,0)"><span>${i}</span>${l}</button>`).join("")}</nav>`;
+  let body="";
   if(tab==="learn"){
-    b.innerHTML=`<p class="muted">Tap 🐢 first, then 🚗, then 🏎️. Say it out loud each time.</p>`+
-    r.phrases.map(([cz,en,note])=>`<div class="card phrase"><div><div class="cz">${esc(cz)}</div><div class="en">${esc(en)}</div>${note?`<div class="note">${esc(note)}</div>`:""}
-    <div class="dots">${[1,2,3,4,5].map(n=>`<i class="${box(cz)>=n?"on":""}"></i>`).join("")}</div></div>${spdBtns(cz)}</div>`).join("")+
-    `<button class="btn" onclick="tab='race';render()">Go to the grid 🏁</button>`;
+    body=`<p class="muted">Tap 🐢 first, then 🚗, then 🏎️. Say it out loud each time.</p><div class="cards">`+
+    r.phrases.map(([cz,en,note])=>`<div class="card phrase"><div class="cz">${esc(cz)}</div><div class="en">${esc(en)}</div>${note?`<div class="note">${esc(note)}</div>`:""}
+    <div class="dots">${[1,2,3,4,5].map(n=>`<i class="${box(cz)>=n?"on":""}"></i>`).join("")}</div>${spdBtns(cz)}</div>`).join("")+`</div>`;
   } else if(tab==="setup"){
-    b.innerHTML=`<div class="card setup">${r.setup}</div><button class="btn" onclick="tab='race';render()">Go to the grid 🏁</button>`;
+    body=`<div class="card setup">${r.setup}</div><button class="btn" onclick="tab='pit';render();scrollTo(0,0)">Test it in the pit stop ⛽</button>`;
+  } else if(tab==="pit"){
+    const pt=S.pit[id], n=PIT[id].length;
+    body=`<div class="card"><h3>⛽ Pit stop quiz</h3><p>${n} quick checks on this round's <b>Setup</b> sheet. Every answer comes with the reason, so wrong answers still teach you.</p>
+    <p class="muted">Clean stop = all correct. Faster is better, but accuracy first.</p>
+    ${pt?`<p class="muted">Best: ${pt.best}/${n}${pt.time?` · fastest clean stop ${pt.time}s`:""}</p>`:""}</div>
+    <button class="btn" onclick="startPit('${id}')">Box, box! ⛽</button>
+    <div style="margin-top:10px"><button class="btn alt" onclick="tab='setup';render()">Read the Setup sheet first</button></div>`;
   } else {
     const st=S.rounds[id];
-    b.innerHTML=`<div class="card"><b>10-lap race.</b> Mostly listening (your weak spot), plus building phrases and picking meanings. 80%+ = podium.
+    body=`<div class="card"><h3>🏁 10-lap race</h3><p>Mostly listening (your weak spot), plus building phrases and picking meanings. 80%+ = podium.</p>
     ${st?`<p class="muted">Best: ${st.best}% (${posLabel(st.best).short}) · ${st.runs} race${st.runs>1?"s":""}</p>`:""}</div>
     <button class="btn" onclick="startRace('${id}')">Lights out 🚦</button>`;
   }
+  app.innerHTML=`<button class="back" onclick="go('home')">‹ Calendar</button>
+  <h2 style="margin-top:2px">Round ${r.n} · ${esc(r.title)} – ${esc(r.en)}</h2>${body}${nav}`;
 }
 
 /* ===================== RACE ===================== */
@@ -413,7 +442,7 @@ function score(ok){
   const fb=document.getElementById("fb");
   const p=q.p;
   fb.innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"✅ Clean lap!":"❌ Lock-up."}
-    ${p?`<div class="row" style="align-items:center;margin-top:6px"><div><div class="cz">${esc(p.cz)}</div><div class="muted">${esc(p.en)}</div>${p.note?`<div class="note" style="color:var(--amber);font-size:13px">${esc(p.note)}</div>`:""}</div>${spdBtns(p.cz)}</div>`
+    ${p?`<div class="cz">${esc(p.cz)}</div><div class="muted">${esc(p.en)}</div>${p.note?`<div style="color:var(--amber);font-size:15px">${esc(p.note)}</div>`:""}${spdBtns(p.cz)}`
       :`<div style="margin-top:6px"><b>${esc(q.s.o[q.s.a])}</b><div class="muted">${esc(q.s.why)}</div></div>`}
   </div><div style="margin-top:12px"><button class="btn" onclick="next()">${R.i<9?"Next lap ›":"Chequered flag 🏁"}</button></div>`;
   if(p&&!ok) speak(p.cz);
@@ -474,10 +503,112 @@ function result({pct,newUnlock}){
   app.innerHTML=`<div class="card result"><div class="muted">Round ${ROUNDS[idx].n} · ${esc(ROUNDS[idx].en)}</div>
     <div class="p">${L.big}</div><div style="font-size:22px;font-weight:800">${pct}%</div><p>${L.msg}</p>
     ${newUnlock&&nxt?`<p>🔓 <b>Round ${nxt.n}: ${esc(nxt.en)}</b> unlocked</p>`:""}</div>
-  ${misses.length?`<h2>Debrief – lock-ups</h2>`+misses.map(p=>`<div class="card phrase"><div><div class="cz">${esc(p.cz)}</div><div class="en">${esc(p.en)}</div></div>${spdBtns(p.cz)}</div>`).join(""):""}
+  ${misses.length?`<h2>Debrief – lock-ups</h2>`+`<div class="cards">`+misses.map(p=>`<div class="card phrase"><div class="cz">${esc(p.cz)}</div><div class="en">${esc(p.en)}</div>${spdBtns(p.cz)}</div>`).join("")+`</div>`:""}
   <div class="row" style="margin-top:12px"><button class="btn alt" onclick="startRace('${R.id}')">Re-run</button>
   ${newUnlock&&nxt?`<button class="btn" onclick="tab='learn';go('round','${nxt.id}')">Next round ›</button>`:`<button class="btn" onclick="go('home')">Calendar</button>`}</div>`;
 }
+
+/* ===================== PIT STOP QUIZ ===================== */
+const PIT={
+pozdravy:[
+  ["Which ending tells you it's the polite vy form?",["-te  (máte)","-š  (máš)","-m  (mám)"],0,"vy-verbs end in -te: máte, jste. ty-verbs end in -š: máš."],
+  ["Partner's dad, first meeting: „Jak se ___?“",["máte","máš","mám"],0,"Older + first meeting → vy → máte."],
+  ["Your daughter asks how you are. You bounce it back:",["A ty?","A vy?","Na shledanou."],0,"Kids always get ty."],
+  ["Who offers to switch from vy to ty?",["The older person","You – the sooner the better","Whoever speaks first"],0,"The older (or more senior) person offers ty. Never jump in first."],
+  ["„Klidně mi tykej“ means…",["Feel free to say ty to me","Please speak slowly","Nice to meet you"],0,"tykat = to use ty. Once you hear this, switch!"],
+  ["„Máš“ is…",["the ty form of 'have'","the vy form of 'have'","'I have'"],0,"máš = you (ty) have. mám = I have. máte = you (vy) have."],
+  ["Leaving the in-laws' (still on vy terms):",["Na shledanou!","Ahoj!","Dobrý den!"],0,"Na shledanou is the formal bye. Dobrý den is only hello."]
+],
+stul:[
+  ["„I am“ is…",["jsem","jsi","je"],0,"jsem = I am, jsi = you (ty) are, je = he/she/it is."],
+  ["„You (vy) have“ is…",["máte","máš","mají"],0,"máte = vy. máš = ty. mají = they have."],
+  ["„They are“ is…",["jsou","jsme","jste"],0,"jsou = they are, jsme = we are, jste = you (vy) are."],
+  ["How do you say „I'm hungry“?",["Mám hlad.","Jsem hlad.","Je hlad."],0,"Czech HAS hunger: mám hlad = I have hunger."],
+  ["„To ___ moc dobré.“ (That is really good)",["je","jsem","má"],0,"To je… = That is… – your most useful table phrase."],
+  ["„We have“ is…",["máme","máte","mám"],0,"máme = we have. -me is the 'we' ending: máme, jsme."],
+  ["Why is there no „já“ (I) in „Mám hlad“?",["The ending already shows who","It would be rude","Hunger is plural"],0,"-m means 'I', so Czech usually drops the pronoun."]
+],
+vanoce:[
+  ["„kapr“ (carp) is…",["masculine","feminine","neuter"],0,"Ends in a consonant → usually masculine: ten kapr."],
+  ["„babička“ is…",["feminine","masculine","neuter"],0,"Ends in -a → usually feminine: ta babička."],
+  ["„cukroví“ is…",["neuter","feminine","masculine"],0,"Ends in -í → often neuter: to cukroví."],
+  ["„___ káva“ (that coffee)",["ta","ten","to"],0,"káva ends in -a → feminine → ta."],
+  ["„dobr__ pivo“ (good beer)",["dobré","dobrý","dobrá"],0,"pivo is neuter → dobré."],
+  ["„dobr__ den“ (good day)",["dobrý","dobrá","dobré"],0,"den is masculine → dobrý. That's why it's Dobrý den!"],
+  ["Why „Veselé Vánoce“ and not „Veselý Vánoce“?",["Vánoce is always plural","Vánoce is feminine","It's a typo"],0,"Vánoce only exists in the plural, and plural adjectives here end -é."]
+],
+rodina:[
+  ["Calling grandma for dinner:",["Babičko!","Babička!","Babičku!"],0,"Vocative of babička is babičko – the -a becomes -o."],
+  ["Your daughter calls you:",["Tati!","Táta!","Tátu!"],0,"táta → tati when calling."],
+  ["Calling grandpa (děda):",["Dědo!","Děda!","Dědi!"],0,"-a becomes -o: děda → dědo."],
+  ["Why do the family call you „Darene“?",["It's the vocative of Daren","It's a nickname","They're mispronouncing it"],0,"Men's names ending in a consonant add -e when you call them."],
+  ["The vocative is used when you…",["call or speak to someone","talk about someone","give someone something"],0,"Vocative = addressing someone directly."],
+  ["„Mami!“ is…",["calling mum","talking about mum","'my mum'"],0,"máma → mami when you call her."]
+],
+tatinek:[
+  ["You (a man) say „I love you“:",["Mám tě rád.","Mám tě ráda.","Mám tě rádi."],0,"rád = said by a man."],
+  ["Your daughter says „I love you“:",["Mám tě ráda.","Mám tě rád.","Mám tě rádo."],0,"ráda = said by a woman or girl."],
+  ["„Pojď!“ means…",["Come!","Give!","Look!"],0,"Pojď sem! = Come here!"],
+  ["„Podívej!“ means…",["Look!","Come!","Again!"],0,"Podívej = look (a command to one person)."],
+  ["In „Dej mi pusu“, „Dej“ is…",["a command to one person (ty)","the past tense","a question"],0,"Dej = give! (to one person you say ty to)."],
+  ["Your partner says „Mám tě ___“",["ráda","rád","rádi"],0,"She's the speaker, so ráda."]
+]};
+
+let P=null;
+function startPit(id){
+  P={id,i:0,res:[],answered:false,t0:Date.now(),
+     qs:shuffle(PIT[id]).map(([q,o,a,why])=>({q,a,why,o:shuffle(o.map((x,i)=>({x,i})))}))};
+  go("pit");
+}
+function pit(){
+  const q=P.qs[P.i], n=P.qs.length;
+  const laps=P.qs.map((_,i)=>`<i class="${i<P.res.length?(P.res[i]?"ok":"bad"):i===P.i?"cur":""}"></i>`).join("");
+  app.innerHTML=`<div class="q-head"><span>⛽ Check ${P.i+1}/${n}</span><button class="back" onclick="twice(this,()=>{tab='pit';go('round','${P.id}')})">Abort ✕</button></div>
+  <div class="laps">${laps}</div><div class="kind">Pit stop · Setup quiz</div>
+  <div class="prompt en">${esc(q.q)}</div>
+  <div class="opts">${q.o.map(o=>`<button class="opt" data-v="${o.i}" onclick="pitAns(${o.i},this)">${esc(o.x)}</button>`).join("")}</div><div id="fb"></div>`;
+}
+function pitAns(v,el){
+  if(P.answered)return; P.answered=true;
+  const q=P.qs[P.i], ok=v===q.a; P.res.push(ok);
+  document.querySelectorAll(".opt").forEach(b=>{if(+b.dataset.v===q.a)b.classList.add("right")});
+  if(!ok)el.classList.add("wrong");
+  if(ok){S.xp+=5;bumpStreak()} save(); updatePills();
+  const fb=document.getElementById("fb");
+  fb.innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"✅ Clean!":"❌ Wheel nut stuck."}</b><div style="margin-top:6px">${esc(q.why)}</div></div>
+  <div style="margin-top:12px"><button class="btn" onclick="pitNext()">${P.i<P.qs.length-1?"Next check ›":"Release! 🟢"}</button></div>`;
+  fb.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function pitNext(){
+  P.i++; P.answered=false;
+  if(P.i<P.qs.length) return pit();
+  const n=P.qs.length, right=P.res.filter(Boolean).length, secs=Math.round((Date.now()-P.t0)/1000);
+  const st=S.pit[P.id]||{best:0,time:null};
+  st.best=Math.max(st.best,right);
+  if(right===n&&(!st.time||secs<st.time)) st.time=secs;
+  S.pit[P.id]=st; if(right===n)S.xp+=15; save();
+  go("pitResult",{right,n,secs});
+}
+function pitResult({right,n,secs}){
+  const misses=P.qs.filter((q,i)=>!P.res[i]);
+  const verdict=right===n?(secs<=60?"⚡ Lightning stop – perfect and fast.":"✅ Clean stop. Now do it quicker."):right>=n-1?"Nearly clean – one wheel nut stuck.":"Slow stop. Re-read the Setup sheet and go again.";
+  app.innerHTML=`<div class="card result"><div class="muted">⛽ Pit stop · Round ${ROUNDS.find(r=>r.id===P.id).n}</div>
+  <div class="p">${right}/${n}</div><div style="font-size:20px;font-weight:700">${secs}s</div><p>${verdict}</p></div>
+  ${misses.length?`<h2>Debrief</h2>`+misses.map(q=>`<div class="card"><b>${esc(q.q)}</b><div class="cz" style="margin-top:6px">${esc(q.o.find(o=>o.i===q.a).x)}</div><div class="muted">${esc(q.why)}</div></div>`).join(""):""}
+  <div class="row" style="margin-top:12px"><button class="btn alt" onclick="startPit('${P.id}')">Again</button><button class="btn" onclick="tab='race';go('round','${P.id}')">To the race 🏁</button></div>`;
+}
+
+/* ===================== FIT TO SCREEN =====================
+   Chrome on the Fold often switches to "desktop site" (≈980px wide), which shrinks everything.
+   Detect that and zoom back to the phone's real width, then apply the chosen text size. */
+function fit(){
+  const sw=screen.width||innerWidth, r=innerWidth/sw;
+  const base=(r>1.25&&r<4)?r:1;
+  const z=base*(S.textScale||1);
+  document.documentElement.style.zoom=z.toFixed(3);
+  document.documentElement.classList.toggle("wide",innerWidth/z>=600);
+}
+addEventListener("resize",fit); fit();
 
 render();
 </script>
