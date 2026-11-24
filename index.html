@@ -90,7 +90,7 @@ input.type{width:100%;background:var(--panel);border:1px solid var(--line);borde
 .fb{margin-top:16px;border-radius:14px;padding:14px 16px;font-size:18px}
 .fb.ok{background:#0f3b22;border:1px solid var(--green)}
 .fb.no{background:#3b0f12;border:1px solid var(--red)}
-.fb .cz{font-size:23px;font-weight:800;margin-top:6px}
+.fb>.cz{font-size:23px;font-weight:800;margin-top:6px}
 .result{text-align:center}
 .result .p{font-size:72px;font-weight:900;line-height:1}
 .warn{background:#3a2a05;border:1px solid var(--amber);color:#ffe08a;font-size:15px}
@@ -102,6 +102,17 @@ html.wide .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 html.wide .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
 html.wide .opts{grid-template-columns:repeat(2,minmax(0,1fr))}
 html.wide main{padding-inline:16px}
+.ref{width:100%;border-collapse:collapse;margin-top:10px;font-size:16px;background:rgba(0,0,0,.2);border-radius:10px;overflow:hidden}
+.ref th{text-align:left;padding:8px 10px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.ref td{padding:7px 8px;border-top:1px solid rgba(255,255,255,.08)}
+.ref tr.hi td{background:rgba(245,179,1,.18);font-weight:800}
+.rule{margin-top:8px;font-size:17px}
+.gloss{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.gloss span{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:5px 9px;font-size:14px;line-height:1.25}
+.gloss b{display:block;font-size:16px;color:#a9cbff}
+.big{font-size:30px;font-weight:800;text-align:center;margin:4px 0}
+.skill{display:grid;grid-template-columns:8.5em minmax(0,1fr) 3.2em;gap:10px;align-items:center;margin:9px 0;font-size:15px}
+.skill .bar{margin:0}.skill span:last-child{text-align:right;font-weight:700}
 </style>
 </head>
 <body>
@@ -181,7 +192,7 @@ const ROUNDS = [
   ],
   setup:`<h3>Every noun has a gender</h3>
   <p>Masculine, feminine or neuter. You can usually tell from the ending – and the little word for "the/that" changes with it.</p>
-  <table><tr><th>gender</th><th>usual ending</th><th>examples</th></tr>
+  <table><tr><th>gender</th><th>ending</th><th>examples</th></tr>
   <tr><td>masculine</td><td>consonant</td><td class="cz">ten dárek, ten kapr</td></tr>
   <tr><td>feminine</td><td>-a</td><td class="cz">ta babička, ta káva</td></tr>
   <tr><td>neuter</td><td>-o / -í</td><td class="cz">to cukroví, to pivo</td></tr></table>
@@ -191,9 +202,9 @@ const ROUNDS = [
 { id:"rodina", n:4, title:"Rodina", en:"Meet the family",
   phrases:[
     ["máma","mum",""],
-    ["mami!","Mum! (calling her)","Vocative – see Setup."],
+    ["mami!","Mum! (what kids call out)","Pet form. The textbook vocative is mámo! – see Setup."],
     ["táta","dad",""],
-    ["tati!","Dad! (calling you)","What your daughter shouts."],
+    ["tati!","Dad! (what your daughter shouts)","Pet form. The textbook vocative is táto!"],
     ["babička","grandma",""],
     ["děda","grandpa",""],
     ["dcera","daughter",""],
@@ -206,13 +217,14 @@ const ROUNDS = [
     ["Můžete mluvit pomaleji?","Can you speak more slowly? (vy)","Your listening lifeline."]
   ],
   setup:`<h3>The vocative – calling someone</h3>
-  <p>Your first grammar case, and your daughter already uses it. When you <i>call</i> someone, their name changes.</p>
-  <table><tr><th>talking about</th><th>calling them</th></tr>
-  <tr><td class="cz">máma</td><td class="cz">mami!</td></tr>
-  <tr><td class="cz">táta</td><td class="cz">tati!</td></tr>
-  <tr><td class="cz">babička</td><td class="cz">babičko!</td></tr>
-  <tr><td class="cz">děda</td><td class="cz">dědo!</td></tr>
-  <tr><td class="cz">Daren</td><td class="cz">Darene!</td></tr></table>
+  <p>Your first grammar <b>case</b>. When you <i>call</i> or speak <i>to</i> someone, the end of their name changes. Three rules cover most of it:</p>
+  <table><tr><th>rule</th><th>talking about</th><th>calling them</th></tr>
+  <tr><td>-a → -o</td><td class="cz">máma</td><td class="cz">mámo!</td></tr>
+  <tr><td>-a → -o</td><td class="cz">babička</td><td class="cz">babičko!</td></tr>
+  <tr><td>-a → -o</td><td class="cz">děda</td><td class="cz">dědo!</td></tr>
+  <tr><td>hard consonant → +e</td><td class="cz">Daren</td><td class="cz">Darene!</td></tr>
+  <tr><td>soft consonant (š ž č ř j) → +i</td><td class="cz">Tomáš</td><td class="cz">Tomáši!</td></tr></table>
+  <p><b>Real life:</b> kids mostly shout the pet forms <span class="cz">mami!</span> and <span class="cz">tati!</span> – that's what you'll hear from your daughter. The textbook forms are <span class="cz">mámo!</span> and <span class="cz">táto!</span></p>
   <p>So when the family call you <span class="cz">Darene</span>, that's not a mistake – that's grammar.</p>`
 },
 { id:"tatinek", n:5, title:"Tatínek", en:"Daddy Track taster",
@@ -253,9 +265,68 @@ const PHASES = [
 ];
 const TARGET_HOURS = 45;
 
+const GLOSS={
+"Ahoj":"Ahoj=hi / bye (borrowed from English 'ahoy')",
+"Dobrý den":"Dobrý=good (masculine form)|den=day (masculine noun)",
+"Dobrý večer":"Dobrý=good (masculine)|večer=evening (masculine)",
+"Na shledanou":"Na=until|shledanou=seeing again",
+"Jak se máš?":"Jak=how|se=yourself|máš=you have (mít · ty)",
+"Jak se máte?":"Jak=how|se=yourself|máte=you have (mít · vy)",
+"Mám se dobře, děkuju.":"Mám=I have (mít · já)|se=myself|dobře=well|děkuju=I thank",
+"A ty?":"A=and|ty=you (informal)",
+"A vy?":"A=and|vy=you (formal / plural)",
+"Děkuju":"děkuju=I thank (děkovat · já)",
+"Prosím":"prosím=I ask (prosit · já)",
+"Dobrou chuť!":"Dobrou=good (feminine, object form)|chuť=appetite (feminine)",
+"Na zdraví!":"Na=to|zdraví=health",
+"To je moc dobré.":"To=that|je=is (být · on/ona/to)|moc=very|dobré=good (neuter – matches 'to')",
+"Chutná mi to.":"Chutná=tastes good (chutnat · it)|mi=to me|to=it",
+"Ještě trochu, prosím.":"Ještě=more / still|trochu=a little|prosím=please",
+"Už nemůžu, děkuju.":"Už=any more|nemůžu=I can't (ne + můžu · já)|děkuju=thanks",
+"Dáte si kávu?":"Dáte=you give (dát · vy)|si=yourself|kávu=coffee (káva → kávu as the object)",
+"Ano, prosím.":"Ano=yes|prosím=please",
+"Ne, děkuju.":"Ne=no|děkuju=thanks",
+"Mám hlad.":"Mám=I have (mít · já)|hlad=hunger (masculine)",
+"Mám žízeň.":"Mám=I have (mít · já)|žízeň=thirst (feminine – despite the consonant)",
+"Veselé Vánoce!":"Veselé=merry (plural form)|Vánoce=Christmas (always plural)",
+"Šťastný nový rok!":"Šťastný=happy (masculine)|nový=new (masculine)|rok=year (masculine)",
+"Štědrý večer":"Štědrý=generous (masculine)|večer=evening – literally 'generous evening'",
+"Ježíšek":"Ježíš + -ek=Jesus + 'little' ending",
+"dárek":"dar + -ek=gift + 'little' ending (masculine)",
+"dárky":"dárky=presents (plural: -ek → -ky)",
+"stromeček":"strom + -eček=tree + 'little' ending (masculine)",
+"kapr":"kapr=carp (masculine – ends in consonant)",
+"bramborový salát":"bramborový=potato- (adjective, masculine)|salát=salad (masculine)",
+"cukroví":"cukroví=sweet things, from cukr 'sugar' (neuter – ends in -í)",
+"Děkuju za dárek.":"Děkuju=I thank|za=for|dárek=the present",
+"máma":"máma=mum (feminine)","mami!":"mami=pet form used to call mum",
+"táta":"táta=dad (masculine – a man, despite -a)","tati!":"tati=pet form used to call dad",
+"babička":"bába + -ička=granny + affectionate ending (feminine)",
+"děda":"děda=grandpa (masculine – a man, despite -a)",
+"dcera":"dcera=daughter (feminine)",
+"partnerka":"partner + -ka=partner + female ending",
+"Jmenuju se Daren.":"Jmenuju=I name (jmenovat · já)|se=myself|Daren=Daren",
+"Těší mě.":"Těší=it pleases|mě=me",
+"Tohle je moje dcera.":"Tohle=this|je=is (být)|moje=my (feminine – matches dcera)|dcera=daughter",
+"Mluvím jen trochu česky.":"Mluvím=I speak (mluvit · já)|jen=only|trochu=a little|česky=in Czech",
+"Nerozumím.":"Ne + rozumím=not + I understand (rozumět · já)",
+"Můžete mluvit pomaleji?":"Můžete=can you (vy)|mluvit=to speak|pomaleji=more slowly",
+"Pojď sem!":"Pojď=come! (command · ty)|sem=here (towards me)",
+"Ještě jednou!":"Ještě=again|jednou=once",
+"Hotovo!":"Hotovo=finished (neuter – 'it is done')",
+"Šikulka!":"Šikulka=clever one (from šikovný 'skilful')",
+"Máš hlad?":"Máš=you have (mít · ty)|hlad=hunger",
+"Pojď spinkat.":"Pojď=come! (ty)|spinkat=sleep (baby-talk for spát)",
+"Dobrou noc.":"Dobrou=good (feminine, object form)|noc=night (feminine)",
+"Kde je méďa?":"Kde=where|je=is (být)|méďa=teddy (from medvěd 'bear')",
+"Dej mi pusu.":"Dej=give! (command · ty)|mi=to me|pusu=kiss (pusa → pusu as the object)",
+"Mám tě rád.":"Mám=I have|tě=you (object)|rád=fond (man speaking) – literally 'I have you dear'"
+};
+const glossHtml=cz=>GLOSS[cz]?`<div class="gloss">${GLOSS[cz].split("|").map(s=>{const [w,e]=s.split("=");return `<span><b>${esc(w)}</b>${esc(e)}</span>`}).join("")}</div>`:"";
+
 /* ===================== STATE ===================== */
 const KEY="czc_v1";
-const fresh=()=>({xp:0,streak:0,lastDay:null,minutes:0,mastery:{},rounds:{},listen:{r:0,t:0},speed:0.85,log:{},pit:{},textScale:1});
+const fresh=()=>({xp:0,streak:0,lastDay:null,minutes:0,mastery:{},rounds:{},listen:{r:0,t:0},speed:0.85,log:{},pit:{},textScale:1,skills:{}});
 let S; try{S=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY))||{})}catch(e){S=fresh()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const dayStr=(d=new Date())=>d.toISOString().slice(0,10);
@@ -322,13 +393,17 @@ function home(){
     <div class="card kpi"><div class="v">${Math.round(S.log[dayStr()]||0)}<span class="muted">/15m</span></div><div class="l">Today</div>
       <div class="week">${days.map((d,i)=>`<div class="${i===6?"today":""}"><b style="height:${100*(S.log[d.k]||0)/max}%"></b>${d.l}</div>`).join("")}</div></div>
   </div>
+  <h2>Pit crew · grammar skills</h2>
+  <div class="card">${Object.entries(SKILL_LABEL).map(([k,l])=>{const s=S.skills[k];const p=s&&s.t?Math.round(100*s.r/s.t):0;
+    return `<div class="skill"><span>${l}</span><div class="bar"><i style="width:${p}%"></i></div><span>${s&&s.t?p+"%":"–"}</span></div>`}).join("")}
+    <div class="muted">Accuracy in pit-stop drills.</div></div>
   <h2>Round calendar · Christmas Sprint</h2>
   <div class="cards">
   ${ROUNDS.map((r,i)=>{const st=S.rounds[r.id];const pt=S.pit[r.id];const lk=!unlocked(i);const done=(st?.best||0)>=80;
-    return `<div class="card round ${lk?"locked":""} ${done?"done":""}" ${lk?"":`onclick="tab='learn';go('round','${r.id}')"`}>
+    return `<div class="card round ${lk?"locked":""} ${done?"done":""}" ${lk?"":`onclick="tab='setup';go('round','${r.id}')"`}>
       <div class="num">${lk?"🔒":done?"✓":"R"+r.n}</div>
       <div><div class="t">${esc(r.title)}</div><div class="s">${esc(r.en)}</div></div>
-      <div class="pos">${st?posLabel(st.best).short:lk?"":"Start ›"}${pt?`<small>⛽ ${pt.best}/${PIT[r.id].length}</small>`:""}</div></div>`}).join("")}
+      <div class="pos">${st?posLabel(st.best).short:lk?"":"Start ›"}${pt?`<small>⛽ best ${pt.best}/10</small>`:""}</div></div>`}).join("")}
   </div>
   <p class="muted">Podium (80%+) in a race unlocks the next round.</p>
   <h2>Later this season</h2>
@@ -345,25 +420,25 @@ function home(){
   </div>`;
 }
 
-let tab="learn";
-const TABS=[["learn","📖","Learn"],["setup","🔧","Setup"],["pit","⛽","Pit stop"],["race","🏁","Race"]];
+let tab="setup";
+const TABS=[["setup","🔧","1 Setup"],["pit","⛽","2 Pit stop"],["learn","📖","3 Phrases"],["race","🏁","4 Race"]];
 function round(id){
   const r=ROUNDS.find(x=>x.id===id);
   const nav=`<nav class="tabs">${TABS.map(([k,i,l])=>`<button class="${tab===k?"on":""}" onclick="tab='${k}';render();scrollTo(0,0)"><span>${i}</span>${l}</button>`).join("")}</nav>`;
   let body="";
   if(tab==="learn"){
     body=`<p class="muted">Tap 🐢 first, then 🚗, then 🏎️. Say it out loud each time.</p><div class="cards">`+
-    r.phrases.map(([cz,en,note])=>`<div class="card phrase"><div class="cz">${esc(cz)}</div><div class="en">${esc(en)}</div>${note?`<div class="note">${esc(note)}</div>`:""}
+    r.phrases.map(([cz,en,note])=>`<div class="card phrase"><div class="cz">${esc(cz)}</div><div class="en">${esc(en)}</div>${glossHtml(cz)}${note?`<div class="note">${esc(note)}</div>`:""}
     <div class="dots">${[1,2,3,4,5].map(n=>`<i class="${box(cz)>=n?"on":""}"></i>`).join("")}</div>${spdBtns(cz)}</div>`).join("")+`</div>`;
   } else if(tab==="setup"){
-    body=`<div class="card setup">${r.setup}</div><button class="btn" onclick="tab='pit';render();scrollTo(0,0)">Test it in the pit stop ⛽</button>`;
+    body=`<div class="card setup">${r.setup}</div><button class="btn" onclick="startPit('${id}')">Drill it in the pit stop ⛽</button>`;
   } else if(tab==="pit"){
-    const pt=S.pit[id], n=PIT[id].length;
-    body=`<div class="card"><h3>⛽ Pit stop quiz</h3><p>${n} quick checks on this round's <b>Setup</b> sheet. Every answer comes with the reason, so wrong answers still teach you.</p>
-    <p class="muted">Clean stop = all correct. Faster is better, but accuracy first.</p>
-    ${pt?`<p class="muted">Best: ${pt.best}/${n}${pt.time?` · fastest clean stop ${pt.time}s`:""}</p>`:""}</div>
+    const pt=S.pit[id];
+    body=`<div class="card"><h3>⛽ Pit crew drills</h3><p>10 grammar drills built from this round's Setup tables: <b>${[...new Set(ROUND_SKILLS[id].map(s=>SKILL_LABEL[skillKey(s)]))].join(", ")}</b>${ROUNDS.findIndex(r=>r.id===id)>0?", plus 2 review drills from earlier rounds":""}.</p>
+    <p>Each answer shows the <b>rule</b> and the <b>table it comes from</b>. Questions are generated, so every stop is different.</p>
+    ${pt?`<p class="muted">Best: ${pt.best}/10${pt.time?` · fastest clean stop ${pt.time}s`:""}</p>`:""}</div>
     <button class="btn" onclick="startPit('${id}')">Box, box! ⛽</button>
-    <div style="margin-top:10px"><button class="btn alt" onclick="tab='setup';render()">Read the Setup sheet first</button></div>`;
+    <div style="margin-top:10px"><button class="btn alt" onclick="tab='setup';render()">Re-read the Setup sheet</button></div>`;
   } else {
     const st=S.rounds[id];
     body=`<div class="card"><h3>🏁 10-lap race</h3><p>Mostly listening (your weak spot), plus building phrases and picking meanings. 80%+ = podium.</p>
@@ -442,7 +517,7 @@ function score(ok){
   const fb=document.getElementById("fb");
   const p=q.p;
   fb.innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"✅ Clean lap!":"❌ Lock-up."}
-    ${p?`<div class="cz">${esc(p.cz)}</div><div class="muted">${esc(p.en)}</div>${p.note?`<div style="color:var(--amber);font-size:15px">${esc(p.note)}</div>`:""}${spdBtns(p.cz)}`
+    ${p?`<div class="cz">${esc(p.cz)}</div><div class="muted">${esc(p.en)}</div>${glossHtml(p.cz)}${p.note?`<div style="color:var(--amber);font-size:15px">${esc(p.note)}</div>`:""}${spdBtns(p.cz)}`
       :`<div style="margin-top:6px"><b>${esc(q.s.o[q.s.a])}</b><div class="muted">${esc(q.s.why)}</div></div>`}
   </div><div style="margin-top:12px"><button class="btn" onclick="next()">${R.i<9?"Next lap ›":"Chequered flag 🏁"}</button></div>`;
   if(p&&!ok) speak(p.cz);
@@ -508,76 +583,116 @@ function result({pct,newUnlock}){
   ${newUnlock&&nxt?`<button class="btn" onclick="tab='learn';go('round','${nxt.id}')">Next round ›</button>`:`<button class="btn" onclick="go('home')">Calendar</button>`}</div>`;
 }
 
-/* ===================== PIT STOP QUIZ ===================== */
-const PIT={
-pozdravy:[
-  ["Which ending tells you it's the polite vy form?",["-te  (máte)","-š  (máš)","-m  (mám)"],0,"vy-verbs end in -te: máte, jste. ty-verbs end in -š: máš."],
-  ["Partner's dad, first meeting: „Jak se ___?“",["máte","máš","mám"],0,"Older + first meeting → vy → máte."],
-  ["Your daughter asks how you are. You bounce it back:",["A ty?","A vy?","Na shledanou."],0,"Kids always get ty."],
-  ["Who offers to switch from vy to ty?",["The older person","You – the sooner the better","Whoever speaks first"],0,"The older (or more senior) person offers ty. Never jump in first."],
-  ["„Klidně mi tykej“ means…",["Feel free to say ty to me","Please speak slowly","Nice to meet you"],0,"tykat = to use ty. Once you hear this, switch!"],
-  ["„Máš“ is…",["the ty form of 'have'","the vy form of 'have'","'I have'"],0,"máš = you (ty) have. mám = I have. máte = you (vy) have."],
-  ["Leaving the in-laws' (still on vy terms):",["Na shledanou!","Ahoj!","Dobrý den!"],0,"Na shledanou is the formal bye. Dobrý den is only hello."]
-],
-stul:[
-  ["„I am“ is…",["jsem","jsi","je"],0,"jsem = I am, jsi = you (ty) are, je = he/she/it is."],
-  ["„You (vy) have“ is…",["máte","máš","mají"],0,"máte = vy. máš = ty. mají = they have."],
-  ["„They are“ is…",["jsou","jsme","jste"],0,"jsou = they are, jsme = we are, jste = you (vy) are."],
-  ["How do you say „I'm hungry“?",["Mám hlad.","Jsem hlad.","Je hlad."],0,"Czech HAS hunger: mám hlad = I have hunger."],
-  ["„To ___ moc dobré.“ (That is really good)",["je","jsem","má"],0,"To je… = That is… – your most useful table phrase."],
-  ["„We have“ is…",["máme","máte","mám"],0,"máme = we have. -me is the 'we' ending: máme, jsme."],
-  ["Why is there no „já“ (I) in „Mám hlad“?",["The ending already shows who","It would be rude","Hunger is plural"],0,"-m means 'I', so Czech usually drops the pronoun."]
-],
-vanoce:[
-  ["„kapr“ (carp) is…",["masculine","feminine","neuter"],0,"Ends in a consonant → usually masculine: ten kapr."],
-  ["„babička“ is…",["feminine","masculine","neuter"],0,"Ends in -a → usually feminine: ta babička."],
-  ["„cukroví“ is…",["neuter","feminine","masculine"],0,"Ends in -í → often neuter: to cukroví."],
-  ["„___ káva“ (that coffee)",["ta","ten","to"],0,"káva ends in -a → feminine → ta."],
-  ["„dobr__ pivo“ (good beer)",["dobré","dobrý","dobrá"],0,"pivo is neuter → dobré."],
-  ["„dobr__ den“ (good day)",["dobrý","dobrá","dobré"],0,"den is masculine → dobrý. That's why it's Dobrý den!"],
-  ["Why „Veselé Vánoce“ and not „Veselý Vánoce“?",["Vánoce is always plural","Vánoce is feminine","It's a typo"],0,"Vánoce only exists in the plural, and plural adjectives here end -é."]
-],
-rodina:[
-  ["Calling grandma for dinner:",["Babičko!","Babička!","Babičku!"],0,"Vocative of babička is babičko – the -a becomes -o."],
-  ["Your daughter calls you:",["Tati!","Táta!","Tátu!"],0,"táta → tati when calling."],
-  ["Calling grandpa (děda):",["Dědo!","Děda!","Dědi!"],0,"-a becomes -o: děda → dědo."],
-  ["Why do the family call you „Darene“?",["It's the vocative of Daren","It's a nickname","They're mispronouncing it"],0,"Men's names ending in a consonant add -e when you call them."],
-  ["The vocative is used when you…",["call or speak to someone","talk about someone","give someone something"],0,"Vocative = addressing someone directly."],
-  ["„Mami!“ is…",["calling mum","talking about mum","'my mum'"],0,"máma → mami when you call her."]
-],
-tatinek:[
-  ["You (a man) say „I love you“:",["Mám tě rád.","Mám tě ráda.","Mám tě rádi."],0,"rád = said by a man."],
-  ["Your daughter says „I love you“:",["Mám tě ráda.","Mám tě rád.","Mám tě rádo."],0,"ráda = said by a woman or girl."],
-  ["„Pojď!“ means…",["Come!","Give!","Look!"],0,"Pojď sem! = Come here!"],
-  ["„Podívej!“ means…",["Look!","Come!","Again!"],0,"Podívej = look (a command to one person)."],
-  ["In „Dej mi pusu“, „Dej“ is…",["a command to one person (ty)","the past tense","a question"],0,"Dej = give! (to one person you say ty to)."],
-  ["Your partner says „Mám tě ___“",["ráda","rád","rádi"],0,"She's the speaker, so ráda."]
-]};
+/* ===================== PIT CREW: GRAMMAR DRILL ENGINE ===================== */
+const PRON=[["já","I"],["ty","you · informal"],["on / ona","he / she"],["my","we"],["vy","you · formal"],["oni","they"]];
+const VERBS={
+  byt:{inf:"být",en:"to be",f:["jsem","jsi","je","jsme","jste","jsou"],note:"Irregular – learn it as a block. Note ty = jsi: the one ty-form without -š."},
+  mit:{inf:"mít",en:"to have",f:["mám","máš","má","máme","máte","mají"],note:"The model pattern: -m (I) · -š (you) · nothing (he/she) · -me (we) · -te (you formal) · -jí (they)."},
+  mluvit:{inf:"mluvit",en:"to speak",f:["mluvím","mluvíš","mluví","mluvíme","mluvíte","mluví"],note:"Same endings as mít: -m · -š · – · -me · -te."},
+  chtit:{inf:"chtít",en:"to want",f:["chci","chceš","chce","chceme","chcete","chtějí"],note:"Irregular 'I' form (chci) – but ty still ends -š and vy still ends -te."}
+};
+const verbTable=(k,hi)=>{const v=VERBS[k];return `<table class="ref"><tr><th colspan="2">${v.inf} – ${v.en}</th></tr>${PRON.map((p,i)=>`<tr class="${i===hi?"hi":""}"><td>${p[0]} <span class="muted">${p[1]}</span></td><td class="cz">${v.f[i]}</td></tr>`).join("")}</table>`};
+const NOUNS=[
+ ["dárek","present","m"],["kapr","carp","m"],["stromeček","Christmas tree","m"],["salát","salad","m"],["den","day","m"],["večer","evening","m"],["rok","year","m"],["dům","house","m"],["pes","dog","m"],["čaj","tea","m"],
+ ["táta","dad","m","Ends in -a but means a man → masculine. Meaning beats the ending."],["děda","grandpa","m","Ends in -a but means a man → masculine. Meaning beats the ending."],
+ ["babička","grandma","f"],["máma","mum","f"],["káva","coffee","f"],["voda","water","f"],["dcera","daughter","f"],["polévka","soup","f"],["kočka","cat","f"],["partnerka","partner","f"],
+ ["noc","night","f","Exception: feminine despite the consonant ending. Learn it with its word: ta noc, dobrou noc."],
+ ["pivo","beer","n"],["víno","wine","n"],["auto","car","n"],["mléko","milk","n"],["jídlo","food","n"],["okno","window","n"],["cukroví","Christmas biscuits","n"],
+ ["kuře","chicken","n","Ends in -e: young animals are neuter – kuře (chick), kotě (kitten)."]
+].map(([cz,en,g,note])=>({cz,en,g,note}));
+const G={m:{name:"masculine",ten:"ten",adj:"dobrý",rule:"Ends in a consonant → masculine"},f:{name:"feminine",ten:"ta",adj:"dobrá",rule:"Ends in -a → feminine"},n:{name:"neuter",ten:"to",adj:"dobré",rule:"Ends in -o or -í → neuter"}};
+const genderTable=hi=>`<table class="ref"><tr><th>gender</th><th>ending</th><th>that</th><th>good</th></tr>${["m","f","n"].map(k=>`<tr class="${k===hi?"hi":""}"><td>${G[k].name}</td><td>${{m:"consonant",f:"-a",n:"-o / -í"}[k]}</td><td class="cz">${G[k].ten}</td><td class="cz">${G[k].adj}</td></tr>`).join("")}</table>`;
+const VOC=[
+ ["máma","mámo","-a → -o",["máma","mámu"]],["táta","táto","-a → -o",["táta","tátu"]],["babička","babičko","-a → -o",["babička","babičku"]],
+ ["děda","dědo","-a → -o",["děda","dědu"]],["Jana","Jano","-a → -o",["Jana","Janu"]],
+ ["Daren","Darene","hard consonant → +e",["Daren","Darenu"]],["Jan","Jane","hard consonant → +e",["Jan","Janu"]],["Adam","Adame","hard consonant → +e",["Adam","Adamu"]],
+ ["Tomáš","Tomáši","soft consonant (š ž č ř j) → +i",["Tomáše","Tomáš"]],["Lukáš","Lukáši","soft consonant (š ž č ř j) → +i",["Lukáše","Lukáš"]]
+];
+const vocTable=rule=>`<table class="ref"><tr><th>rule</th><th>example</th></tr>${[["-a → -o","máma → mámo"],["hard consonant → +e","Daren → Darene"],["soft consonant (š ž č ř j) → +i","Tomáš → Tomáši"]].map(r=>`<tr class="${r[0]===rule?"hi":""}"><td>${r[0]}</td><td class="cz">${r[1]}</td></tr>`).join("")}</table>`;
+const RAD=[["You (Daren)","Mám tě ___.","rád"],["Your partner","Mám tě ___.","ráda"],["Your daughter","Mám tě ___.","ráda"],["Grandpa","Mám tě ___.","rád"],["Grandma","Mám tě ___.","ráda"],["The whole family together","Máme tě ___.","rádi"]];
+const radTable=hi=>`<table class="ref"><tr><th>speaker</th><th>form</th></tr>${[["a man","rád"],["a woman or girl","ráda"],["a group","rádi"]].map(r=>`<tr class="${r[1]===hi?"hi":""}"><td>${r[0]}</td><td class="cz">${r[1]}</td></tr>`).join("")}</table>`;
+
+const pick=a=>a[Math.random()*a.length|0];
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const SKILL_LABEL={tyvy:"Ty / vy endings",byt:"být – to be",mit:"mít – to have",gender:"Noun gender",agree:"ten/ta/to + adjectives",voc:"Vocative",rad:"rád / ráda / rádi"};
+const skillKey=s=>({"conj:byt":"byt","who:byt":"byt","conj:mit":"mit","who:mit":"mit",tenTaTo:"agree",adj:"agree"})[s]||s;
+const ROUND_SKILLS={pozdravy:["tyvy"],stul:["conj:byt","conj:mit","who:byt","who:mit"],vanoce:["gender","tenTaTo","adj"],rodina:["voc"],tatinek:["rad"]};
+const ORDER=["masculine","feminine","neuter","ten","ta","to","dobrý","dobrá","dobré","rád","ráda","rádi"];
+function drill(skill){
+  const [kind,arg]=skill.split(":");
+  const mk=o=>Object.assign({skill:skillKey(skill),typed:false,fixed:false,sub:""},o);
+  if(kind==="tyvy"){
+    const T=[["___ hlad?","mit","Are you hungry?"],["Jak se ___?","mit","How are you?"],["___ česky?","mluvit","Do you speak Czech?"],["___ kávu?","chtit","Do you want a coffee?"],["Kde ___?","byt","Where are you?"]];
+    const W=[["your daughter","ty"],["your partner","ty"],["your partner's mum (first meeting)","vy"],["your partner's dad","vy"],["her parents, both together","vy"]];
+    const t=pick(T),w=pick(W),v=VERBS[t[1]],i=w[1]==="ty"?1:4,ans=v.f[i];
+    return mk({q:`Asking ${w[0]}:`,big:t[0],sub:t[2],ans,wrong:[v.f[i===1?4:1],v.f[0]],
+      why:`${cap(w[0])} → <b>${w[1]}</b>. ${w[1]==="ty"?"ty-forms end in <b>-š</b> (jsi is the one exception)":"vy-forms end in <b>-te</b> (vy is also the plural 'you')"} → <span class="cz">${esc(t[0].replace("___",ans))}</span>`,
+      ref:verbTable(t[1],i)});
+  }
+  if(kind==="conj"){
+    const v=VERBS[arg],i=Math.random()*6|0,ans=v.f[i];
+    return mk({q:`${v.inf} – ${v.en}`,big:`${PRON[i][0]} ___`,sub:PRON[i][1],ans,wrong:shuffle([...new Set(v.f.filter(f=>f!==ans))]).slice(0,3),
+      typed:Math.random()<0.5,why:v.note,ref:verbTable(arg,i)});
+  }
+  if(kind==="who"){
+    const v=VERBS[arg],ok=[0,1,2,3,4,5].filter(i=>v.f.filter(f=>f===v.f[i]).length===1),i=pick(ok);
+    const lab=k=>`${PRON[k][0]} (${PRON[k][1]})`;
+    return mk({q:`${v.inf} – who is it?`,big:v.f[i],ans:lab(i),wrong:shuffle([0,1,2,3,4,5].filter(k=>k!==i)).slice(0,3).map(lab),
+      why:`The ending tells you who – that's why Czech can drop the pronoun. ${v.note}`,ref:verbTable(arg,i)});
+  }
+  const n=pick(NOUNS),g=G[n.g],why=`<span class="cz">${n.cz}</span>: ${n.note||g.rule+"."} So it's <b>${g.name}</b>`;
+  if(kind==="gender") return mk({q:"Which gender?",big:n.cz,sub:n.en,ans:g.name,wrong:["masculine","feminine","neuter"].filter(x=>x!==g.name),fixed:true,why:why+".",ref:genderTable(n.g)});
+  if(kind==="tenTaTo") return mk({q:"Which word for 'that / the'?",big:`___ ${n.cz}`,sub:n.en,ans:g.ten,wrong:["ten","ta","to"].filter(x=>x!==g.ten),fixed:true,why:`${why} → <span class="cz">${g.ten} ${n.cz}</span>.`,ref:genderTable(n.g)});
+  if(kind==="adj") return mk({q:"Make 'good' agree:",big:`dobr__ ${n.cz}`,sub:"good "+n.en,ans:g.adj,wrong:["dobrý","dobrá","dobré"].filter(x=>x!==g.adj),fixed:true,why:`${why} → <span class="cz">${g.adj} ${n.cz}</span>. Adjectives copy the noun's gender: -ý / -á / -é.`,ref:genderTable(n.g)});
+  if(kind==="voc"){const v=pick(VOC);return mk({q:"Calling out to them:",big:`${v[0]} → ___!`,ans:v[1],wrong:v[3],why:`Rule: <b>${v[2]}</b> → <span class="cz">${v[1]}!</span>`,ref:vocTable(v[2])});}
+  if(kind==="rad"){const r=pick(RAD);return mk({q:`${r[0]} says:`,big:r[1],sub:"I love you",ans:r[2],wrong:["rád","ráda","rádi"].filter(x=>x!==r[2]),fixed:true,why:`rád / ráda / rádi follows the <b>speaker</b>, not the person being loved. ${r[0]} → <span class="cz">${r[2]}</span>.`,ref:radTable(r[2])});}
+}
 
 let P=null;
 function startPit(id){
-  P={id,i:0,res:[],answered:false,t0:Date.now(),
-     qs:shuffle(PIT[id]).map(([q,o,a,why])=>({q,a,why,o:shuffle(o.map((x,i)=>({x,i})))}))};
+  const idx=ROUNDS.findIndex(r=>r.id===id);
+  const cur=ROUND_SKILLS[id], prev=ROUNDS.slice(0,idx).flatMap(r=>ROUND_SKILLS[r.id]);
+  const plan=[...Array(prev.length?8:10)].map((_,i)=>cur[i%cur.length]).concat(prev.length?[pick(prev),pick(prev)]:[]);
+  const seen=new Set(), qs=[];
+  shuffle(plan).forEach(s=>{let d,tries=0;do{d=drill(s);tries++}while(seen.has(d.q+d.big)&&tries<12);seen.add(d.q+d.big);
+    d.o=d.fixed?[d.ans,...d.wrong].sort((a,b)=>ORDER.indexOf(a)-ORDER.indexOf(b)):shuffle([d.ans,...d.wrong]);
+    qs.push(d)});
+  P={id,qs,i:0,res:[],answered:false,t0:Date.now()};
   go("pit");
 }
 function pit(){
   const q=P.qs[P.i], n=P.qs.length;
   const laps=P.qs.map((_,i)=>`<i class="${i<P.res.length?(P.res[i]?"ok":"bad"):i===P.i?"cur":""}"></i>`).join("");
-  app.innerHTML=`<div class="q-head"><span>⛽ Check ${P.i+1}/${n}</span><button class="back" onclick="twice(this,()=>{tab='pit';go('round','${P.id}')})">Abort ✕</button></div>
-  <div class="laps">${laps}</div><div class="kind">Pit stop · Setup quiz</div>
-  <div class="prompt en">${esc(q.q)}</div>
-  <div class="opts">${q.o.map(o=>`<button class="opt" data-v="${o.i}" onclick="pitAns(${o.i},this)">${esc(o.x)}</button>`).join("")}</div><div id="fb"></div>`;
+  const answer=q.typed
+    ?`<input class="type" id="typed" autocomplete="off" autocapitalize="off" placeholder="Type the form…" onkeydown="if(event.key==='Enter')pitType()"><button class="btn" id="chk" onclick="pitType()">Check</button>`
+    :`<div class="opts">${q.o.map((o,k)=>`<button class="opt" onclick="pitAns(${k},this)">${esc(o)}</button>`).join("")}</div>`;
+  app.innerHTML=`<div class="q-head"><span>⛽ ${P.i+1}/${n} · ${SKILL_LABEL[q.skill]}</span><button class="back" onclick="twice(this,()=>{tab='pit';go('round','${P.id}')})">Abort ✕</button></div>
+  <div class="laps">${laps}</div><div class="kind">${esc(q.q)}</div>
+  <div class="big">${esc(q.big)}</div>${q.sub?`<div class="sub">${esc(q.sub)}</div>`:""}
+  <div style="margin-top:16px">${answer}</div><div id="fb"></div>`;
 }
-function pitAns(v,el){
+function pitScore(ok,accentNote){
   if(P.answered)return; P.answered=true;
-  const q=P.qs[P.i], ok=v===q.a; P.res.push(ok);
-  document.querySelectorAll(".opt").forEach(b=>{if(+b.dataset.v===q.a)b.classList.add("right")});
-  if(!ok)el.classList.add("wrong");
+  const q=P.qs[P.i]; P.res.push(ok);
+  const s=S.skills[q.skill]||{r:0,t:0}; s.t++; if(ok)s.r++; S.skills[q.skill]=s;
   if(ok){S.xp+=5;bumpStreak()} save(); updatePills();
   const fb=document.getElementById("fb");
-  fb.innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"✅ Clean!":"❌ Wheel nut stuck."}</b><div style="margin-top:6px">${esc(q.why)}</div></div>
-  <div style="margin-top:12px"><button class="btn" onclick="pitNext()">${P.i<P.qs.length-1?"Next check ›":"Release! 🟢"}</button></div>`;
+  fb.innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"✅ Clean!":"❌ Wheel nut stuck."}</b> ${ok?"":`Answer: <span class="cz">${esc(q.ans)}</span>`}
+  ${accentNote?`<div class="muted">Right form – watch the accents: <span class="cz">${esc(q.ans)}</span></div>`:""}
+  <div class="rule">${q.why}</div>${q.ref}</div>
+  <div style="margin-top:12px"><button class="btn" onclick="pitNext()">${P.i<P.qs.length-1?"Next drill ›":"Release! 🟢"}</button></div>`;
   fb.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function pitAns(k,el){
+  if(P.answered)return; const q=P.qs[P.i], ok=q.o[k]===q.ans;
+  document.querySelectorAll(".opt").forEach((b,j)=>{if(q.o[j]===q.ans)b.classList.add("right")});
+  if(!ok)el.classList.add("wrong"); pitScore(ok);
+}
+function pitType(){
+  if(P.answered)return; const q=P.qs[P.i], v=document.getElementById("typed").value.trim().toLowerCase();
+  document.getElementById("chk").disabled=true;
+  const exact=v===q.ans.toLowerCase(), loose=!exact&&norm(v)===norm(q.ans);
+  pitScore(exact||loose,loose);
 }
 function pitNext(){
   P.i++; P.answered=false;
@@ -590,12 +705,14 @@ function pitNext(){
   go("pitResult",{right,n,secs});
 }
 function pitResult({right,n,secs}){
+  const by={}; P.qs.forEach((q,i)=>{const b=by[q.skill]||(by[q.skill]={r:0,t:0});b.t++;if(P.res[i])b.r++});
   const misses=P.qs.filter((q,i)=>!P.res[i]);
-  const verdict=right===n?(secs<=60?"⚡ Lightning stop – perfect and fast.":"✅ Clean stop. Now do it quicker."):right>=n-1?"Nearly clean – one wheel nut stuck.":"Slow stop. Re-read the Setup sheet and go again.";
+  const verdict=right===n?(secs<=90?"⚡ Lightning stop – perfect and fast.":"✅ Clean stop. Now do it quicker."):right>=n-1?"Nearly clean – one wheel nut stuck.":"Slow stop. Re-read the Setup sheet and go again.";
   app.innerHTML=`<div class="card result"><div class="muted">⛽ Pit stop · Round ${ROUNDS.find(r=>r.id===P.id).n}</div>
   <div class="p">${right}/${n}</div><div style="font-size:20px;font-weight:700">${secs}s</div><p>${verdict}</p></div>
-  ${misses.length?`<h2>Debrief</h2>`+misses.map(q=>`<div class="card"><b>${esc(q.q)}</b><div class="cz" style="margin-top:6px">${esc(q.o.find(o=>o.i===q.a).x)}</div><div class="muted">${esc(q.why)}</div></div>`).join(""):""}
-  <div class="row" style="margin-top:12px"><button class="btn alt" onclick="startPit('${P.id}')">Again</button><button class="btn" onclick="tab='race';go('round','${P.id}')">To the race 🏁</button></div>`;
+  <h2>Telemetry by skill</h2><div class="card">${Object.entries(by).map(([k,b])=>`<div class="skill"><span>${SKILL_LABEL[k]}</span><div class="bar"><i style="width:${100*b.r/b.t}%"></i></div><span>${b.r}/${b.t}</span></div>`).join("")}</div>
+  ${misses.length?`<h2>Debrief – the rules you missed</h2>`+misses.map(q=>`<div class="card"><div class="kind" style="text-align:left">${esc(q.q)}</div><div style="font-size:22px;font-weight:800">${esc(q.big)} → <span class="cz">${esc(q.ans)}</span></div><div class="rule">${q.why}</div>${q.ref}</div>`).join(""):""}
+  <div class="row" style="margin-top:12px"><button class="btn alt" onclick="startPit('${P.id}')">Again</button><button class="btn" onclick="tab='learn';go('round','${P.id}')">To the phrases ›</button></div>`;
 }
 
 /* ===================== FIT TO SCREEN =====================
